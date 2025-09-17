@@ -1,6 +1,11 @@
 # Prerequisites
 *.d
 
+# debug files
+error
+errors
+error.txt
+errors.txt
 # Object files
 *.o
 *.ko

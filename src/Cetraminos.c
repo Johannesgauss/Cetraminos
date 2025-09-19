@@ -37,47 +37,47 @@ RETURN_TO_MENU:
 	masterPieces[4].AllVectors[1] = (Vector) {0, 1};
 	masterPieces[4].AllVectors[2] = (Vector) {1, 0};
 	masterPieces[4].AllVectors[3] = (Vector) {1, 1};
-	//int *Map[MAP_Y][MAP_X] = (int ***) malloc(sizeof(int) * 100 );
-       	int Map[MAP_Y][MAP_X] = {
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,0,0,0,0,0,0,0,0,0,0,1},
-		{1,1,1,1,1,1,1,1,1,1,1,1}};
-	//int *Map[] = {Map1, Map2, Map3, Map4, Map5, Map6, Map7, Map8, Map9, Map10};  
+
+	int Map[MAP_Y][MAP_X] = {
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,1,1,1,1,1,1,1,1,1},
+					};
 	GE *mainGE = createGraphicEnvironment();
 	
 	SDL_FRect greenSquare[MAP_Y][MAP_X];
 
 	for (int j = 0; j < MAP_Y; j++){
 		for (int i = 0; i < MAP_X; i++){
-			greenSquare[j][i].x = 600 + 40 * i;
-			greenSquare[j][i].y = 100 + 40 * j;
-				greenSquare[j][i].w = 40;
-				greenSquare[j][i].h = 40;
+			greenSquare[j][i].x = 600 + 35 * i;
+			greenSquare[j][i].y = 100 + 35 * j;
+				greenSquare[j][i].w = 35;
+				greenSquare[j][i].h = 35;
 		}
 	};
-	/* I can do a malloc for the map and also for all possible tetraminos. So, instead of creating a new piece every time, I can merely change the pointers.
-	 * So, when the piece lock, instead of freeing it, I'll still use it and I'll only lend it to the OS when all it's done.
-	 * */
-	//populateOrRemove(masterPieces, Map, LIVE_NUM);
 	Piece *piece = (Piece *) malloc(sizeof(Piece));
 	changePiece(masterPieces, piece, 0);
 	bool gameQuit = false;
 	unsigned int lastFrameTime = SDL_GetTicks();
 	unsigned int deltaTime = 0;
-	unsigned int currentTime; // = SDL_GetTicks();
-	//SDL_Delay
+	unsigned int currentTime;
 	int playerMovement;
 	int Validness = VALID;
 	const bool *keys = SDL_GetKeyboardState(NULL);
@@ -128,6 +128,8 @@ RETURN_TO_MENU:
 		if (deltaTime > (20 + 80 * (1 - (fallingVelocity % 4)))) {
 			//nextPiece(randomNumber);
 
+		if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
+
 			if(keys[SDL_SCANCODE_J])
 				spinPiece(Map, masterPieces, piece);
 			if(keys[SDL_SCANCODE_K]) 
@@ -146,8 +148,8 @@ RETURN_TO_MENU:
 				fallingVelocity = 4;
 
 
-			if (keys[SDL_SCANCODE_ESCAPE])
-				goto RETURN_TO_MENU;
+			//if (keys[SDL_SCANCODE_ESCAPE])
+			//	goto RETURN_TO_MENU;
 //----------------------------</Keys handling>
 //----------------------------<Score system and PieceMovement>
 			

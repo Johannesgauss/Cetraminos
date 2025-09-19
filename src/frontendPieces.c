@@ -1,7 +1,7 @@
 #include "menu.h"
 SDL_Texture *createTextTexture(GE *mainGE, char *text)
 {
-	mainGE->font = TTF_OpenFont("/usr/share/fonts/TTF/DejaVuMathTeXGyre.ttf", 24);
+	mainGE->font = TTF_OpenFont("fonts/DejaVuMathTeXGyre.ttf", 24);
 	if (mainGE->font == NULL) printf("oops");;
 	SDL_Surface *textSurface = TTF_RenderText_Solid(mainGE->font, text, strlen(text), (SDL_Color){255, 0, 0, 255});
 	SDL_Texture *textTexture = SDL_CreateTextureFromSurface(mainGE->Renderer, textSurface);

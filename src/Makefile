@@ -1,8 +1,7 @@
-
 SRC = backendPieces.c randomGenerator.c scoreSystem.c menu.c frontendPieces.c Cetraminos.c
 OBJ = backendPieces.o randomGenerator.o scoreSystem.o menu.o frontendPieces.o Cetraminos.o
 
-CFLAGS = -O3 -D_DEBUG -Dlinux -c -I/usr/include/SDL3
+CFLAGS = -O3 -c -I/usr/include/SDL3
 LDFLAGS = -lSDL3 -lSDL3_ttf 
 
 all: Cetraminos
@@ -15,4 +14,3 @@ Cetraminos: $(OBJ)
 clean:
 	@echo Cleaning
 	@rm -f *.o
-

@@ -43,8 +43,8 @@ void spinPiece(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece)
 	for (int i = 0; i < 4; i++){
 		resultVector = matrixMultiplication(tmp_matrixFromAllVectors, piece->AllVectors[i]);
 		if (Map[piece->bendPoint.y + resultVector.y][piece->bendPoint.x + resultVector.x] % 2 == 1){
-			piece->xVector = tmpxVector;
-			piece->yVector = tmpyVector;
+			//piece->xVector = tmpxVector;
+			//piece->yVector = tmpyVector;
 			return;
 		}
 	} 

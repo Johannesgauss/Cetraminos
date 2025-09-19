@@ -147,7 +147,7 @@ RETURN_TO_MENU:
 			else
 				fallingVelocity = 4;
 
-
+			// I need a better solution!
 			//if (keys[SDL_SCANCODE_ESCAPE])
 			//	goto RETURN_TO_MENU;
 //----------------------------</Keys handling>

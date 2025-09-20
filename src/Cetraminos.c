@@ -126,9 +126,9 @@ RETURN_TO_MENU:
 		else
 			playerMovement = 0;
 		if (deltaTime > (20 + 80 * (1 - (fallingVelocity % 4)))) {
-			//nextPiece(randomNumber);
+				//nextPiece(randomNumber);
 
-		if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
+				if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
 
 			if(keys[SDL_SCANCODE_J])
 				spinPiece(Map, masterPieces, piece);
@@ -137,7 +137,7 @@ RETURN_TO_MENU:
 			if (willFallNow >= fallingVelocity){
 				isFalling = 1;
 				willFallNow = willFallNow % fallingVelocity;
-				playerMovement = 0;
+				//playerMovement = 0;
 			} else {
 				isFalling = false;
 				 willFallNow++;

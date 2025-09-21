@@ -1,12 +1,12 @@
 #include "menu.h"
-void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const bool* keys, int randomNumber[RANDOM_BUFFER]){
+void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const Uint8* keys, int randomNumber[RANDOM_BUFFER]){
 	unsigned int deltaTime, currentTime = 0, lastFrameTime = SDL_GetTicks();
 	bool endMenu = false; 
 
-	SDL_FRect selectRect = (SDL_FRect) {300, 500, 300, 200};
-	SDL_FRect startButton = (SDL_FRect) {325, 525, 250, 150};
-	SDL_FRect exitButton = (SDL_FRect) {825, 525, 250, 150};
-	SDL_FRect textRect = (SDL_FRect) {325, 525, 250, 150};
+	SDL_Rect selectRect = (SDL_Rect) {300, 500, 300, 200};
+	SDL_Rect startButton = (SDL_Rect) {325, 525, 250, 150};
+	SDL_Rect exitButton = (SDL_Rect) {825, 525, 250, 150};
+	SDL_Rect textRect = (SDL_Rect) {325, 525, 250, 150};
 	SDL_Texture *startTextTexture = createTextTexture(mainGE, "Start Game");
 	SDL_Texture *exitTextTexture = createTextTexture(mainGE, "Exit");
 	//float originalPosition = selectRect.x;
@@ -14,7 +14,7 @@ void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const b
 	while (!endMenu){
 		nextPiece(randomNumber);
 		while (SDL_PollEvent(&mainGE->Event)){
-			if(mainGE->Event.type == SDL_EVENT_QUIT){
+			if(mainGE->Event.type == SDL_Quit){
 				*gameQuit = true;	
 			};
 		};
@@ -35,8 +35,8 @@ void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const b
 			SDL_SetRenderDrawColor(mainGE->Renderer, 255, 255, 255, 100);
 			SDL_RenderFillRect(mainGE->Renderer, &startButton);
 			SDL_RenderFillRect(mainGE->Renderer, &exitButton);
-			SDL_RenderTexture(mainGE->Renderer, startTextTexture, NULL, &startButton);
-			SDL_RenderTexture(mainGE->Renderer, exitTextTexture, NULL, &exitButton);
+			SDL_RenderCopy(mainGE->Renderer, startTextTexture, NULL, &startButton);
+			SDL_RenderCopy(mainGE->Renderer, exitTextTexture, NULL, &exitButton);
 			SDL_RenderPresent(mainGE->Renderer);
 		} else {
 			nextPiece(randomNumber);

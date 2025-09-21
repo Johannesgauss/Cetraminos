@@ -1,9 +1,10 @@
-#include <SDL3/SDL.h>
-#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "backendPieces.h"
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include "music.h"
 #define WINDOW_TITLE "Cetraminos"
 #define HEIGHT_WINDOW_RESOLUTION 1540
 #define LENGTH_WINDOW_RESOLUTION 1040
@@ -13,7 +14,6 @@ typedef struct GraphicEnvironment {
 	SDL_Renderer *Renderer;
 	SDL_Event Event;
 	TTF_Font *font;
-	SDL_AudioStream *audioStream;
 } GE;
 SDL_Texture *createTextTexture(GE *mainGE, char *text);
 GE *createGraphicEnvironment();

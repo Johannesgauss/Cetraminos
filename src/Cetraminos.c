@@ -1,5 +1,5 @@
 #include "menu.h"
-int main(int argc, char *argv[])
+	int main(int argc, char *argv[])
 {
 RETURN_TO_MENU:
 
@@ -62,7 +62,7 @@ RETURN_TO_MENU:
 					};
 	GE *mainGE = createGraphicEnvironment();
 	
-	SDL_FRect greenSquare[MAP_Y][MAP_X];
+	SDL_Rect greenSquare[MAP_Y][MAP_X];
 
 	for (int j = 0; j < MAP_Y; j++){
 		for (int i = 0; i < MAP_X; i++){
@@ -80,7 +80,7 @@ RETURN_TO_MENU:
 	unsigned int currentTime;
 	int playerMovement;
 	int Validness = VALID;
-	const bool *keys = SDL_GetKeyboardState(NULL);
+	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	bool isFalling = false;
 	int willFallNow = 0;
 	int score = 0;
@@ -93,7 +93,7 @@ RETURN_TO_MENU:
 	bool gameOver = false;
 	char *scoreText = (char *) malloc(40);
 	sprintf(scoreText, "Score: %d", score);
-	SDL_FRect scoreRect =  (SDL_FRect) {100,100,200,100};
+	SDL_Rect scoreRect =  (SDL_Rect) {100,100,200,100};
 //-------------</hardcoded>
 
 //-------------<menu>
@@ -107,7 +107,7 @@ RETURN_TO_MENU:
 	int fallingVelocity = 4;
 	while (!gameQuit) {
 		while (SDL_PollEvent(&mainGE->Event)){
-			if(mainGE->Event.type == SDL_EVENT_QUIT) 
+			if(mainGE->Event.type == SDL_QUIT) 
 		gameQuit = true;
 		}
 		currentTime = SDL_GetTicks();
@@ -126,9 +126,9 @@ RETURN_TO_MENU:
 		else
 			playerMovement = 0;
 		if (deltaTime > (20 + 80 * (1 - (fallingVelocity % 4)))) {
-				//nextPiece(randomNumber);
+			//nextPiece(randomNumber);
 
-				if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
+		if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
 
 			if(keys[SDL_SCANCODE_J])
 				spinPiece(Map, masterPieces, piece);
@@ -157,8 +157,8 @@ RETURN_TO_MENU:
 			if (moreScore == GAME_OVER_ID) 
 				gameOver = true;
 			if (gameOver){
-					SDL_FRect gameOverRect =  (SDL_FRect) {100,100,HEIGHT_WINDOW_RESOLUTION-500,LENGTH_WINDOW_RESOLUTION-500};
-					SDL_RenderTexture(mainGE->Renderer, gameOverTexture, NULL, &gameOverRect);
+					SDL_Rect gameOverRect =  (SDL_Rect) {100,100,HEIGHT_WINDOW_RESOLUTION-500,LENGTH_WINDOW_RESOLUTION-500};
+					SDL_RenderCopy(mainGE->Renderer, gameOverTexture, NULL, &gameOverRect);
 			} else if (moreScore > 0){
 				score += moreScore;
 				sprintf(scoreText, "Score: %d", score);
@@ -170,7 +170,7 @@ RETURN_TO_MENU:
 			SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 0, 255);
 			SDL_RenderClear(mainGE->Renderer);
 
-			SDL_RenderTexture(mainGE->Renderer, scoreTexture, NULL, &scoreRect);
+			SDL_RenderCopy(mainGE->Renderer, scoreTexture, NULL, &scoreRect);
 			for (int j = 0; j < MAP_Y; j++){
 				for (int i = 0; i < MAP_X; i++){
 					switch (Map[j][i]){
@@ -268,6 +268,8 @@ RETURN_TO_MENU:
 			SDL_Delay(20);
 		};
 	};
+	SDL_DestroyTexture(gameOverTexture);
+	SDL_DestroyTexture(scoreTexture);
 	free(scoreText);
 	free(piece);
 	free(masterPieces);

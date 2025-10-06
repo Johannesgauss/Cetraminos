@@ -4,7 +4,7 @@
 void changePiece(Piece *masterPieces, Piece *piece, int number)
 {
 	piece->typeOfPiece = masterPieces[number].typeOfPiece;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 		piece->AllVectors[i] = masterPieces[number].AllVectors[i];
 	piece->xVector = (Vector) {1, 0};
 	piece->yVector = (Vector) {0, 1};

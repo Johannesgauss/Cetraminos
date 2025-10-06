@@ -158,20 +158,20 @@ extern Mix_Music *gMusic;
 		};
 		if (deltaTime > (20 + 80 * (1 - (fallingVelocity % 4)))) {
 			//nextPiece(randomNumber);
+			if (!gameOver){
+					if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
+				if(keys[SDL_SCANCODE_J])
+					spinPiece(Map, masterPieces, piece);
+				if(keys[SDL_SCANCODE_K]) 
+					isFallingFast = true;
+				if (willFallNow >= fallingVelocity && !keys[SDL_SCANCODE_J] && !keys[SDL_SCANCODE_K]){
+					isFalling = 1;
+					willFallNow = willFallNow % fallingVelocity;
+				} else {
+					isFalling = false;
+					 willFallNow++;
+				};
 
-		if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
-
-			if(keys[SDL_SCANCODE_J])
-				spinPiece(Map, masterPieces, piece);
-			if(keys[SDL_SCANCODE_K]) 
-				isFallingFast = true;
-			if (willFallNow >= fallingVelocity){
-				isFalling = 1;
-				willFallNow = willFallNow % fallingVelocity;
-				//playerMovement = 0;
-			} else {
-				isFalling = false;
-				 willFallNow++;
 			};
 				// I need a better solution!
 				if (keys[SDL_SCANCODE_ESCAPE]){

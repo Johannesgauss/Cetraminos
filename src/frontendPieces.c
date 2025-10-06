@@ -1,10 +1,10 @@
 #include "menu.h"
-SDL_Texture *createTextTexture(GE *mainGE, char *text)
+SDL_Texture *createTextTexture(GE *graphicEnvironment, char *text)
 {
-	mainGE->font = TTF_OpenFont("fonts/DejaVuMathTeXGyre.ttf", 24);
-	if (mainGE->font == NULL) printf("oops");;
-		SDL_Surface *textSurface = TTF_RenderText_Solid(mainGE->font, text, (SDL_Color){255, 0, 0, 255});
-	SDL_Texture *textTexture = SDL_CreateTextureFromSurface(mainGE->Renderer, textSurface);
+	graphicEnvironment->font = TTF_OpenFont("fonts/DejaVuMathTeXGyre.ttf", 24);
+	if (graphicEnvironment->font == NULL) printf("oops");
+	SDL_Surface *textSurface = TTF_RenderText_Solid(graphicEnvironment->font, text, (SDL_Color){255, 0, 0, 255});
+	SDL_Texture *textTexture = SDL_CreateTextureFromSurface(graphicEnvironment->Renderer, textSurface);
 	if (!textTexture) printf("oops");
 	//SDL_DestroySurface(textSurface);
 	return textTexture;
@@ -28,11 +28,11 @@ GE *createGraphicEnvironment()
 
 	return graphicEnvironment;
 }
-void destroyGraphicEnvironment(GE *mainGE)
+void destroyGraphicEnvironment(GE *graphicEnvironment)
 {
-	TTF_CloseFont(mainGE->font);
-	SDL_DestroyRenderer(mainGE->Renderer);
-	SDL_DestroyWindow(mainGE->Window);
-	free(mainGE);
+	TTF_CloseFont(graphicEnvironment->font);
+	SDL_DestroyRenderer(graphicEnvironment->Renderer);
+	SDL_DestroyWindow(graphicEnvironment->Window);
+	free(graphicEnvironment);
 }
 

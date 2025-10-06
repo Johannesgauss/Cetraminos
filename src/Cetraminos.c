@@ -102,7 +102,8 @@ int main(int argc, char *argv[])
 
 
 	bool gameOver = false;
-	char *scoreText = (char *) malloc(40);
+	size_t scoreText_buffer;
+       	char *scoreText = (char *) malloc(40);
 	sprintf(scoreText, "Score: %d", score);
 	SDL_Rect scoreRect =  (SDL_Rect) {100,100,200,100};
 RETURN_TO_MENU:
@@ -133,7 +134,7 @@ extern Mix_Music *gMusic;
 		while (SDL_PollEvent(&mainGE->Event)){
 			if(mainGE->Event.type == SDL_QUIT) 
 		gameQuit = true;
-		}
+		};
 		currentTime = SDL_GetTicks();
 		deltaTime = currentTime - lastFrameTime;
 
@@ -185,7 +186,8 @@ extern Mix_Music *gMusic;
 					SDL_RenderCopy(mainGE->Renderer, gameOverTexture, NULL, &gameOverRect);
 			} else if (moreScore > 0){
 				score += moreScore;
-				sprintf(scoreText, "Score: %d", score);
+				// Unecessary, but if I can, I do
+				scoreText_buffer = snprintf(NULL, 0, "Score: %d", score); if (scoreText_buffer <= 40) snprintf(scoreText, scoreText_buffer, "Score: %d", score);
 				scoreTexture = createTextTexture(mainGE, scoreText);
 			};
 //----------------------------</Score system and PieceMovement>

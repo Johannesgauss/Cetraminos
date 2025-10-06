@@ -105,8 +105,14 @@ int main(int argc, char *argv[])
 	char *scoreText = (char *) malloc(40);
 	sprintf(scoreText, "Score: %d", score);
 	SDL_Rect scoreRect =  (SDL_Rect) {100,100,200,100};
+RETURN_TO_MENU:
+	score = 0;
+	sprintf(scoreText, "Score: %d", score);
+	for (int j = 0; j < MAP_Y-1; j++){
+		for (int i = 1; i < MAP_X-1; i++)
+			Map[j][i] = 0;
+	};
 //-------------</hardcoded>
-
 //-------------<menu>
 	menu(mainGE, masterPieces, piece, &gameQuit, keys, randomNumber);
 //-------------</menu>

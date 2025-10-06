@@ -171,6 +171,10 @@ extern Mix_Music *gMusic;
 					isFalling = false;
 					 willFallNow++;
 				};
+				if (keys[SDL_SCANCODE_M])
+					fallingVelocity = 1;
+				else
+					fallingVelocity = 4;
 
 			};
 				// I need a better solution!

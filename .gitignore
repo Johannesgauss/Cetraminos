@@ -7,6 +7,8 @@ errors
 error.txt
 errors.txt
 
+# Ignore music files 
+CetraminosMusic.mp3
 # Object files
 *.o
 *.ko
@@ -41,7 +43,7 @@ errors.txt
 *.i*86
 *.x86_64
 *.hex
-
+Cetraminos
 # Debug files
 *.dSYM/
 *.su
@@ -59,3 +61,6 @@ dkms.conf
 
 # debug information files
 *.dwo
+# ignores fonts
+src/fonts/
+

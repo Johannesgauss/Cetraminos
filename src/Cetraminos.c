@@ -142,14 +142,20 @@ extern Mix_Music *gMusic;
 //----------------------------- <Random Number Generator>
 		nextPiece(randomNumber);
 //----------------------------- </Random Number Generator>
-//----------------------------- <Keys handling>
-
-		if (keys[SDL_SCANCODE_L])
-			playerMovement = 1;
-		else if (keys[SDL_SCANCODE_H] == true)
-			playerMovement = -1;
-		else
-			playerMovement = 0;
+//----------------------------- <Keys handling>	
+		if (!gameOver){
+			if (keys[SDL_SCANCODE_L])
+				playerMovement = 1;
+			else if (keys[SDL_SCANCODE_H] == true)
+				playerMovement = -1;
+			else
+				playerMovement = 0;
+		};
+		if (gameOver){
+			SDL_Rect gameOverRect =  (SDL_Rect) {100,100,HEIGHT_WINDOW_RESOLUTION-500,LENGTH_WINDOW_RESOLUTION-500};
+			SDL_RenderCopy(mainGE->Renderer, gameOverTexture, NULL, &gameOverRect);
+			SDL_RenderPresent(mainGE->Renderer);
+		};
 		if (deltaTime > (20 + 80 * (1 - (fallingVelocity % 4)))) {
 			//nextPiece(randomNumber);
 
@@ -167,24 +173,18 @@ extern Mix_Music *gMusic;
 				isFalling = false;
 				 willFallNow++;
 			};
-			if (keys[SDL_SCANCODE_M])
-				fallingVelocity = 1;
-			else
-				fallingVelocity = 4;
-
-			// I need a better solution!
-			//if (keys[SDL_SCANCODE_ESCAPE])
-			//	goto RETURN_TO_MENU;
+				// I need a better solution!
+				if (keys[SDL_SCANCODE_ESCAPE]){
+					gameOver = false;
+					goto RETURN_TO_MENU;
+				};
 //----------------------------</Keys handling>
 //----------------------------<Score system and PieceMovement>
 			
 			moreScore = pieceMovement(Map, masterPieces, piece, playerMovement, isFalling, isFallingFast, randomNumber);
 			if (moreScore == GAME_OVER_ID) 
 				gameOver = true;
-			if (gameOver){
-					SDL_Rect gameOverRect =  (SDL_Rect) {100,100,HEIGHT_WINDOW_RESOLUTION-500,LENGTH_WINDOW_RESOLUTION-500};
-					SDL_RenderCopy(mainGE->Renderer, gameOverTexture, NULL, &gameOverRect);
-			} else if (moreScore > 0){
+			if (moreScore > 0){
 				score += moreScore;
 				// Unecessary, but if I can, I do
 				scoreText_buffer = snprintf(NULL, 0, "Score: %d", score); if (scoreText_buffer <= 40) snprintf(scoreText, scoreText_buffer, "Score: %d", score);

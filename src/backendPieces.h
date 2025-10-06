@@ -19,11 +19,13 @@ typedef enum MOVEMENT_VALIDNESS{
 	FALLYES_SIDESNO,
 } MOVEMENT_VALIDNESS;
 typedef enum TYPE_OF_PIECES{
-	PIECE_L_ID = 2,
+	PIECE_J_ID = 2,
+	PIECE_L_ID = 4,
 	PIECE_S_ID = 6,
+	PIECE_Z_ID = 8,
 	PIECE_I_ID = 10,
-	PIECE_T_ID = 14,
-	PIECE_O_ID = 18
+	PIECE_T_ID = 12,
+	PIECE_O_ID = 14
 } TYPE_OF_PIECES;
 typedef struct Piece{
 	Vector	AllVectors[4];

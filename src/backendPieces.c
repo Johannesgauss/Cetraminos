@@ -3,11 +3,11 @@
 #define SPINNING_MATRIX (Vector[2]){(Vector){0,1},(Vector){-1,0}}
 void changePiece(Piece *masterPieces, Piece *piece, int number)
 {
-	piece->typeOfPiece   = masterPieces[number].typeOfPiece;
-	piece->AllVectors[0] = masterPieces[number].AllVectors[0];
-	piece->AllVectors[1] = masterPieces[number].AllVectors[1];
-	piece->AllVectors[2] = masterPieces[number].AllVectors[2];
-	piece->AllVectors[3] = masterPieces[number].AllVectors[3];
+	piece->typeOfPiece = masterPieces[number].typeOfPiece;
+	for (int i = 0; i < 3; i++)
+		piece->AllVectors[i] = masterPieces[number].AllVectors[i];
+	piece->xVector = (Vector) {1, 0};
+	piece->yVector = (Vector) {0, 1};
 
 }
 void populateWithGivenNumber(int Map[MAP_Y][MAP_X], Piece *piece, int numberToPopulate)

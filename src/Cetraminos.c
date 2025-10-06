@@ -1,42 +1,51 @@
 #include "menu.h"
-	int main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-RETURN_TO_MENU:
 
 //-------------<hardcoded>
-	Piece *masterPieces = (Piece *)malloc(sizeof(Piece)*5); 
-	masterPieces[0].typeOfPiece = PIECE_L_ID;
+	Piece *masterPieces = (Piece *)malloc(sizeof(Piece)*7); 
+	masterPieces[0].typeOfPiece = PIECE_J_ID;
 	masterPieces[0].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[0].AllVectors[1] = (Vector) {-1, 0};
+	masterPieces[0].AllVectors[1] = (Vector) {-1, 1};
 	masterPieces[0].AllVectors[2] = (Vector) {0, -1};
-	masterPieces[0].AllVectors[3] = (Vector) {0, -2};
+	masterPieces[0].AllVectors[3] = (Vector) {0, 1};
 
-	masterPieces[1].typeOfPiece = PIECE_S_ID;
+	masterPieces[1].typeOfPiece = PIECE_L_ID;
 	masterPieces[1].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[1].AllVectors[1] = (Vector) {0, -1};
-	masterPieces[1].AllVectors[2] = (Vector) {1, -1};
-	masterPieces[1].AllVectors[3] = (Vector) {-1, 0};
+	masterPieces[1].AllVectors[1] = (Vector) {1, 1};
+	masterPieces[1].AllVectors[2] = (Vector) {0, -1};
+	masterPieces[1].AllVectors[3] = (Vector) {0, 1};
 
-
-	masterPieces[2].typeOfPiece = PIECE_I_ID;
+	masterPieces[2].typeOfPiece = PIECE_S_ID;
 	masterPieces[2].AllVectors[0] = (Vector) {0, 0};
 	masterPieces[2].AllVectors[1] = (Vector) {0, -1};
-	masterPieces[2].AllVectors[2] = (Vector) {0, 1};
-	masterPieces[2].AllVectors[3] = (Vector) {0, 2};
+	masterPieces[2].AllVectors[2] = (Vector) {-1, -1};
+	masterPieces[2].AllVectors[3] = (Vector) {1, 0};
 
-
-	masterPieces[3].typeOfPiece = PIECE_T_ID;
+	masterPieces[3].typeOfPiece = PIECE_Z_ID;
 	masterPieces[3].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[3].AllVectors[1] = (Vector) {-1, 0};
-	masterPieces[3].AllVectors[2] = (Vector) {1, 0};
-	masterPieces[3].AllVectors[3] = (Vector) {0, 1};
+	masterPieces[3].AllVectors[1] = (Vector) {0, -1};
+	masterPieces[3].AllVectors[2] = (Vector) {1, -1};
+	masterPieces[3].AllVectors[3] = (Vector) {-1, 0};
 
-
-	masterPieces[4].typeOfPiece = PIECE_O_ID;
+	masterPieces[4].typeOfPiece = PIECE_I_ID;
 	masterPieces[4].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[4].AllVectors[1] = (Vector) {0, 1};
-	masterPieces[4].AllVectors[2] = (Vector) {1, 0};
-	masterPieces[4].AllVectors[3] = (Vector) {1, 1};
+	masterPieces[4].AllVectors[1] = (Vector) {0, -1};
+	masterPieces[4].AllVectors[2] = (Vector) {0, 1};
+	masterPieces[4].AllVectors[3] = (Vector) {0, 2};
+
+	masterPieces[5].typeOfPiece = PIECE_T_ID;
+	masterPieces[5].AllVectors[0] = (Vector) {0, 0};
+	masterPieces[5].AllVectors[1] = (Vector) {-1, 0};
+	masterPieces[5].AllVectors[2] = (Vector) {1, 0};
+	masterPieces[5].AllVectors[3] = (Vector) {0, 1};
+
+
+	masterPieces[6].typeOfPiece = PIECE_O_ID;
+	masterPieces[6].AllVectors[0] = (Vector) {0, 0};
+	masterPieces[6].AllVectors[1] = (Vector) {0, 1};
+	masterPieces[6].AllVectors[2] = (Vector) {1, 0};
+	masterPieces[6].AllVectors[3] = (Vector) {1, 1};
 
 	int Map[MAP_Y][MAP_X] = {
 		{1,0,0,0,0,0,0,0,0,1},
@@ -60,6 +69,8 @@ RETURN_TO_MENU:
 		{1,0,0,0,0,0,0,0,0,1},
 		{1,1,1,1,1,1,1,1,1,1},
 					};
+
+;
 	GE *mainGE = createGraphicEnvironment();
 	
 	SDL_Rect greenSquare[MAP_Y][MAP_X];
@@ -68,8 +79,8 @@ RETURN_TO_MENU:
 		for (int i = 0; i < MAP_X; i++){
 			greenSquare[j][i].x = 600 + 35 * i;
 			greenSquare[j][i].y = 100 + 35 * j;
-				greenSquare[j][i].w = 35;
-				greenSquare[j][i].h = 35;
+			greenSquare[j][i].w = 35;
+			greenSquare[j][i].h = 35;
 		}
 	};
 	Piece *piece = (Piece *) malloc(sizeof(Piece));
@@ -182,11 +193,11 @@ RETURN_TO_MENU:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 200, 100, 100, 100);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
-					case PIECE_L_ID + 2:
+					case PIECE_J_ID:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 0, 100, 255);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
-					case PIECE_L_ID + 3:
+					case PIECE_J_ID + 1:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 0, 100, 100);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
@@ -198,11 +209,11 @@ RETURN_TO_MENU:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 0, 255, 50, 255);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
-					case PIECE_S_ID + 2:
+					case PIECE_Z_ID:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 255, 255, 255, 255);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
-					case PIECE_S_ID + 3:
+					case PIECE_Z_ID + 1:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 255, 255, 255, 255);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
@@ -214,14 +225,6 @@ RETURN_TO_MENU:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 154, 137, 200, 255);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
-					case PIECE_I_ID + 2:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 255, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_I_ID + 3:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 255, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
 					case PIECE_T_ID:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 255, 0, 0, 255);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
@@ -230,27 +233,11 @@ RETURN_TO_MENU:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 255, 0, 0, 100);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
-					case PIECE_T_ID + 2:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 0, 255, 0, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_T_ID + 3:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 0, 255, 0, 100);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
 					case PIECE_O_ID:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 150, 255);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;
 					case PIECE_O_ID + 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 150, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_O_ID + 2:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 150, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_O_ID + 3:
 						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 150, 255);
 						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
 						break;

@@ -8,7 +8,7 @@
 #define WINDOW_TITLE "Cetraminos"
 #define HEIGHT_WINDOW_RESOLUTION 1540
 #define LENGTH_WINDOW_RESOLUTION 1040
-#define WINDOW_FLAGS 0 
+#define WINDOW_FLAGS SDL_WINDOW_FULLSCREEN
 typedef struct GraphicEnvironment {
 	SDL_Window *Window;
 	SDL_Renderer *Renderer;

@@ -88,14 +88,16 @@ int pieceMovement(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece, int 
 		populateWithGivenNumber(Map, piece, PIECE_DEATH_ID);		
 		score = scoreAndCleanMatrix(Map);
 		piece->bendPoint = (Point) {SPAWN_X_LOCATION, SPAWN_Y_LOCATION};	
-		if (isTheMovementValid(Map, piece, playerMovement, isFalling) == NO_MORE_VALID)
+
+		if (isTheMovementValid(Map, piece, playerMovement, 0) == NO_MORE_VALID)
 			return GAME_OVER_ID;
-		int randomNumber = nextPiece(previousNumber);
-		changePiece(masterPieces, piece, (randomNumber % 5));
-		randomNumber = nextPiece(previousNumber);
-		piece->isToRight = randomNumber % 2;
-		piece->xVector = (Vector) {1 - 2 * piece->isToRight, 0};
-		piece->yVector = (Vector) {0, 1};
+
+		int randomNumber;
+	       	do {
+			randomNumber = nextPiece(previousNumber) % 7;
+		} while (randomNumber == piece->typeOfPiece / 2 - 1); 
+		changePiece(masterPieces, piece, randomNumber);
+
 		populateWithGivenNumber(Map, piece, PIECE_LIVE_ID);		
 	};
 	return score;

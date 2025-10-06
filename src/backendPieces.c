@@ -27,7 +27,6 @@ Vector matrixMultiplication(Vector matrix[2], Vector vector)
 };
 void spinPiece(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece)
 {
-	populateWithGivenNumber(Map, piece, 0);
 
 	Vector tmpxVector;
 	Vector tmpyVector;
@@ -43,12 +42,11 @@ void spinPiece(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece)
 	for (int i = 0; i < 4; i++){
 		resultVector = matrixMultiplication(tmp_matrixFromAllVectors, piece->AllVectors[i]);
 		if (Map[piece->bendPoint.y + resultVector.y][piece->bendPoint.x + resultVector.x] % 2 == 1){
-			//piece->xVector = tmpxVector;
-			//piece->yVector = tmpyVector;
 			return;
 		}
-	} 
+	}; 
 	// If succeded
+	populateWithGivenNumber(Map, piece, 0);
 	piece->xVector = tmpxVector;
 	piece->yVector = tmpyVector;
 	populateWithGivenNumber(Map, piece, PIECE_LIVE_ID);
@@ -57,9 +55,10 @@ void spinPiece(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece)
 int isTheMovementValid(int Map[MAP_Y][MAP_X], Piece *piece, int playerMovement, int isFalling)
 {
 	Vector resultVector;
+
 	for (int i = 0; i < 4; i++){
 		resultVector = matrixMultiplication(MATRIX_FROM_ALL_VECTORS, piece->AllVectors[i]);
-		if (Map[piece->bendPoint.y + resultVector.y + isFalling][piece->bendPoint.x + resultVector.x + playerMovement] % 2 == 1){	
+		if (Map[piece->bendPoint.y + resultVector.y + isFalling][piece->bendPoint.x + resultVector.x + playerMovement] % 2 == 1){
 			if (Map[piece->bendPoint.y + resultVector.y + isFalling][piece->bendPoint.x + resultVector.x] % 2 == 1)
 				return NO_MORE_VALID;
 			else 
@@ -74,6 +73,7 @@ int pieceMovement(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece, int 
 	int isValid = isTheMovementValid(Map, piece, playerMovement, isFalling);
 	if (isValid == VALID || (isValid == FALLYES_SIDESNO && isFalling == 1)){
 		populateWithGivenNumber(Map, piece, 0);		
+		// There's a bug here when I press k+l and I gotta fix it
 			if (isFallingFast) {
 				while (isTheMovementValid(Map, piece, playerMovement, 1) != NO_MORE_VALID){
 					piece->bendPoint.y += 1;	

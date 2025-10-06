@@ -114,6 +114,13 @@ int main(int argc, char *argv[])
 	SDL_Texture *gameOverTexture = createTextTexture(mainGE, "GAME OVER!");
 	SDL_Texture *scoreTexture = createTextTexture(mainGE, scoreText);
 //----------------------------</Text Texture creation>
+//-------------<Music system>
+extern Mix_Music *gMusic;
+	if (!gameQuit){
+		Mix_PlayMusic( gMusic, -1 );
+	//	SDL_Delay(7*1000);
+	};
+//-------------</Music system>
 //-------------<Main loop beginning>
 	int fallingVelocity = 4;
 	while (!gameQuit) {
@@ -260,6 +267,7 @@ int main(int argc, char *argv[])
 	free(scoreText);
 	free(piece);
 	free(masterPieces);
+	Mix_FreeMusic(gMusic);
 	destroyGraphicEnvironment(mainGE);
 	return 0;
 }

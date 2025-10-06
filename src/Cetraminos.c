@@ -183,6 +183,10 @@ extern Mix_Music *gMusic;
 					goto RETURN_TO_MENU;
 				};
 //----------------------------</Keys handling>
+//----------------------------<background>
+			SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 0, 255);
+			SDL_RenderClear(mainGE->Renderer);
+//----------------------------</background>
 //----------------------------<Score system and PieceMovement>
 			
 			moreScore = pieceMovement(Map, masterPieces, piece, playerMovement, isFalling, isFallingFast, randomNumber);
@@ -194,13 +198,11 @@ extern Mix_Music *gMusic;
 				scoreText_buffer = snprintf(NULL, 0, "Score: %d", score); if (scoreText_buffer <= 40) snprintf(scoreText, scoreText_buffer, "Score: %d", score);
 				scoreTexture = createTextTexture(mainGE, scoreText);
 			};
+			SDL_RenderCopy(mainGE->Renderer, scoreTexture, NULL, &scoreRect);
 //----------------------------</Score system and PieceMovement>
 			isFallingFast = false; // I gotta change this name later, this name is so counterintuitive!
 //----------------------------Rendering loop
-			SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 0, 255);
-			SDL_RenderClear(mainGE->Renderer);
 
-			SDL_RenderCopy(mainGE->Renderer, scoreTexture, NULL, &scoreRect);
 			for (int j = 0; j < MAP_Y; j++){
 				for (int i = 0; i < MAP_X; i++){
 					switch (Map[j][i]){

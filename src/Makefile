@@ -10,6 +10,8 @@ Cetraminos: $(OBJ)
 	@rm -f Cetraminos
 	@gcc $(OBJ) $(LDFLAGS) -o Cetraminos
 	@echo Linkking OK...
+	@echo Cleaning
+	@rm -f *.o
 
 clean:
 	@echo Cleaning

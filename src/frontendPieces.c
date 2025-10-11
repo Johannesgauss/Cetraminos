@@ -1,4 +1,4 @@
-#include "menu.h"
+#include "frontendPieces.h"
 SDL_Texture *createTextTexture(GE *graphicEnvironment, char *text)
 {
 	graphicEnvironment->font = TTF_OpenFont("fonts/DejaVuMathTeXGyre.ttf", 24);

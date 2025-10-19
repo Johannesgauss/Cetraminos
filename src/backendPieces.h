@@ -8,14 +8,11 @@
 #include <stdbool.h>
 #include "randomGenerator.h"
 #include "scoreSystem.h"
-#define PIECE_LIVE_ID piece->typeOfPiece+2*piece->isToRight
-#define PIECE_DEATH_ID piece->typeOfPiece+2*piece->isToRight+1
 #include <stdlib.h>
 typedef struct Point{
 	int x;
 	int y;
-} Point;
-typedef Point Vector;
+} Point, Vector;
 typedef enum MOVEMENT_VALIDNESS{
 	NO_MORE_VALID,
 	VALID,
@@ -36,7 +33,6 @@ typedef struct Piece{
 	Vector	xVector;
 	Vector	yVector;
 	Point	bendPoint;
-	int	isToRight;
 } Piece;
 void Piece__change(Piece *self, Piece *masterPieces, int number);
 void Piece__spin(Piece *self, int Map[MAP_Y][MAP_X]);

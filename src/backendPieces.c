@@ -1,4 +1,6 @@
 #include "backendPieces.h"
+#define PIECE_LIVE_ID piece->typeOfPiece
+#define PIECE_DEATH_ID piece->typeOfPiece+1
 #define MATRIX_FROM_ALL_VECTORS (Vector[2]){piece->xVector,piece->yVector}
 #define SPINNING_MATRIX (Vector[2]){(Vector){0,1},(Vector){-1,0}}
 #define RESPAWN_DELAY 30
@@ -67,7 +69,7 @@ void Piece__spin(Piece *piece, int Map[MAP_Y][MAP_X])
 		resultVector = matrixMultiplication(tmp_matrixFromAllVectors, piece->AllVectors[i]);
 		if (Map[piece->bendPoint.y + resultVector.y][piece->bendPoint.x + resultVector.x] % 2 == 1){
 			return;
-		}
+		};
 	}; 
 	// If succeded
 	populateWithGivenNumber(piece, Map, 0);

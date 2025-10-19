@@ -99,24 +99,37 @@ int Piece__movement(Piece *piece,
 		  void (*delay)(unsigned int))
 {
 	int score = 0;
-	int isValid = isTheMovementValid(Map, piece, playerMovement, isFalling);
-	if (isValid == VALID || (isValid == FALLYES_SIDESNO && isFalling == 1)){
-		populateWithGivenNumber(Map, piece, 0);		
+	int isValid = isTheMovementValid(piece, Map, playerMovement, isFalling);
+	if (isValid == VALID){
+		populateWithGivenNumber(piece, Map, 0);		
 		// There's a bug here when I press k+l and I gotta fix it
-			if (isFallingFast) {
-				while (isTheMovementValid(Map, piece, playerMovement, 1) != NO_MORE_VALID){
-					piece->bendPoint.y += 1;	
-				};
-			} else if (isFalling) {
-					piece->bendPoint.y += 1;	
-			};
-		if (isValid == VALID)
-			piece->bendPoint.x += playerMovement;	
-		populateWithGivenNumber(Map, piece, PIECE_LIVE_ID);		
-	} else if (isValid == NO_MORE_VALID){
-		populateWithGivenNumber(Map, piece, PIECE_DEATH_ID);		
-		score = scoreAndCleanMatrix(Map);
+	
+		// It "falls" once and see if it'll "drop". If so, it'll go down by 1 until it's no more valid and then stops.
+		// Oh, man! Comments in the code let's this seems it was made by AI. It you have any doubt it was 100% human made, reconsider your intelligence!
+		// I hate this AI bubble, I hope this bubble explodes soon!
+		// perhabs I'll change my opinion, though
+		piece->bendPoint.x += playerMovement;	
+		piece->bendPoint.y += isFalling;	
+		if (isDropping){
+			isValid = isTheMovementValid(piece, Map, 0, 1);
+			do {
+				piece->bendPoint.y += 1;	
+				isValid = isTheMovementValid(piece, Map, 0, 1);
+			} while (isValid != NO_MORE_VALID);
+		};	
+		populateWithGivenNumber(piece, Map, PIECE_LIVE_ID);		
+	} else if (isValid == FALLYES_SIDESNO && isFalling == 1){
+		populateWithGivenNumber(piece, Map, 0);		
+		isValid = isTheMovementValid(piece, Map, 0, 1);
+		if (isValid != NO_MORE_VALID) 
+			piece->bendPoint.y += 1;	
+		populateWithGivenNumber(piece, Map, PIECE_LIVE_ID);		
+	};
+       	if (isValid == NO_MORE_VALID){
+		populateWithGivenNumber(piece, Map, PIECE_DEATH_ID);		
+		delay(RESPAWN_DELAY);
 		piece->bendPoint = (Point) {SPAWN_X_LOCATION, SPAWN_Y_LOCATION};	
+		score = scoreAndCleanMatrix(Map);
 
 		if (isTheMovementValid(piece, Map, playerMovement, 0) == NO_MORE_VALID)
 			return GAME_OVER_ID;

@@ -41,8 +41,17 @@ static int isTheMovementValid(Piece *piece, int Map[MAP_Y][MAP_X], int playerMov
 	return result;
 }
 
+void Piece__change(Piece *piece, Piece *masterPieces, int number)
 {
+	piece->typeOfPiece = masterPieces[number].typeOfPiece;
+	for (int i = 0; i < 4; i++)
+		piece->AllVectors[i] = masterPieces[number].AllVectors[i];
+	piece->xVector = (Vector) {1, 0};
+	piece->yVector = (Vector) {0, 1};
+}
 
+void Piece__spin(Piece *piece, int Map[MAP_Y][MAP_X])
+{
 	Vector tmpxVector;
 	Vector tmpyVector;
 
@@ -61,15 +70,13 @@ static int isTheMovementValid(Piece *piece, int Map[MAP_Y][MAP_X], int playerMov
 		}
 	}; 
 	// If succeded
-	populateWithGivenNumber(Map, piece, 0);
+	populateWithGivenNumber(piece, Map, 0);
 	piece->xVector = tmpxVector;
 	piece->yVector = tmpyVector;
-	populateWithGivenNumber(Map, piece, PIECE_LIVE_ID);
+	populateWithGivenNumber(piece, Map, PIECE_LIVE_ID);
 }
 
-int isTheMovementValid(int Map[MAP_Y][MAP_X], Piece *piece, int playerMovement, int isFalling)
-{
-	Vector resultVector;
+// Piece__movement
 
 	for (int i = 0; i < 4; i++){
 		resultVector = matrixMultiplication(MATRIX_FROM_ALL_VECTORS, piece->AllVectors[i]);
@@ -82,7 +89,14 @@ int isTheMovementValid(int Map[MAP_Y][MAP_X], Piece *piece, int playerMovement, 
 	};
 	return VALID;
 }
-int pieceMovement(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece, int playerMovement, int isFalling, bool isFallingFast, int previousNumber[RANDOM_BUFFER])
+int Piece__movement(Piece *piece, 
+		  int Map[MAP_Y][MAP_X],
+		  Piece *masterPieces,
+	       	  int playerMovement,
+		  int isFalling,
+		  bool isDropping,
+		  int previousNumber[RANDOM_BUFFER],
+		  void (*delay)(unsigned int))
 {
 	int score = 0;
 	int isValid = isTheMovementValid(Map, piece, playerMovement, isFalling);
@@ -104,16 +118,16 @@ int pieceMovement(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece, int 
 		score = scoreAndCleanMatrix(Map);
 		piece->bendPoint = (Point) {SPAWN_X_LOCATION, SPAWN_Y_LOCATION};	
 
-		if (isTheMovementValid(Map, piece, playerMovement, 0) == NO_MORE_VALID)
+		if (isTheMovementValid(piece, Map, playerMovement, 0) == NO_MORE_VALID)
 			return GAME_OVER_ID;
 
 		int randomNumber;
 	       	do {
 			randomNumber = nextPiece(previousNumber) % 7;
 		} while (randomNumber == piece->typeOfPiece / 2 - 1); 
-		changePiece(masterPieces, piece, randomNumber);
+		Piece__change(piece, masterPieces, randomNumber);
 
-		populateWithGivenNumber(Map, piece, PIECE_LIVE_ID);		
+		populateWithGivenNumber(piece, Map, PIECE_LIVE_ID);		
 	};
 	return score;
 

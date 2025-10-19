@@ -20,5 +20,6 @@ int nextPiece(int previousNumber[RANDOM_BUFFER])
 	for (int i = 0; i < 4; i++){
 		result = result ^ randomGeneratedNumber[i]; 		
 	};
+	result = result % 7;
 	return result;
 }

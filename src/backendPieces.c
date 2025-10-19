@@ -26,6 +26,21 @@ static inline Vector matrixMultiplication(Vector matrix[2], Vector vector)
 
 static int isTheMovementValid(Piece *piece, int Map[MAP_Y][MAP_X], int playerMovement, int isFalling)
 { 
+	int result = VALID;
+	Vector resultVector;
+	int i = 0; while (i < 4 && result == VALID){
+		resultVector = matrixMultiplication(MATRIX_FROM_ALL_VECTORS, piece->AllVectors[i]);
+		if (Map[piece->bendPoint.y + resultVector.y + isFalling][piece->bendPoint.x + resultVector.x + playerMovement] % 2 == 1){
+			if (Map[piece->bendPoint.y + resultVector.y + 1][piece->bendPoint.x + resultVector.x] % 2 == 1)
+				result = NO_MORE_VALID;
+			else 
+				result = FALLYES_SIDESNO;
+		};
+		i++;
+	};
+	return result;
+}
+
 {
 
 	Vector tmpxVector;

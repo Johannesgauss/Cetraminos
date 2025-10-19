@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
 	masterPieces[6].AllVectors[2] = (Vector) {1, 0};
 	masterPieces[6].AllVectors[3] = (Vector) {1, 1};
 
+		
 	int Map[MAP_Y][MAP_X] = {
 		{1,0,0,0,0,0,0,0,0,1},
 		{1,0,0,0,0,0,0,0,0,1},
@@ -68,8 +69,8 @@ int main(int argc, char *argv[])
 		{1,0,0,0,0,0,0,0,0,1},
 		{1,0,0,0,0,0,0,0,0,1},
 		{1,1,1,1,1,1,1,1,1,1},
-					};
-
+					}; 
+	
 ;
 	GE *mainGE = createGraphicEnvironment();
 	
@@ -95,10 +96,9 @@ int main(int argc, char *argv[])
 	bool isFalling = false;
 	int willFallNow = 0;
 	int score = 0;
-	bool isFallingFast = false;
+	bool isDropping = false;
 	int moreScore = 0;
 	int randomNumber[RANDOM_BUFFER] = {1, 31, 51, 101, 37, 29, 19, 202, 81, 53, 12, 73, 16, 195, 92};
-
 
 
 	bool gameOver = false;
@@ -201,7 +201,7 @@ extern Mix_Music *gMusic;
 			};
 			SDL_RenderCopy(mainGE->Renderer, scoreTexture, NULL, &scoreRect);
 //----------------------------</Score system and PieceMovement>
-			isFallingFast = false; // I gotta change this name later, this name is so counterintuitive!
+			isDropping = false; // I gotta change this name later, this name is so counterintuitive!
 //----------------------------Rendering loop
 
 			for (int j = 0; j < MAP_Y; j++){

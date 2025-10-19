@@ -1,14 +1,13 @@
 #include "menu.h"
 #define select_toStart_ButtonXPosition 300
 #define select_toEnd_ButtonXPosition 800
-void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const Uint8* keys, int randomNumber[RANDOM_BUFFER]){
+void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const Uint8 *keys, int randomNumber[RANDOM_BUFFER]){
 	unsigned int deltaTime, currentTime = 0, lastFrameTime = SDL_GetTicks();
 	bool endMenu = false; 
 
 	SDL_Rect selectRect = (SDL_Rect) {300, 500, select_toStart_ButtonXPosition, 200};
 	SDL_Rect startButton = (SDL_Rect) {325, 525, 250, 150};
 	SDL_Rect exitButton = (SDL_Rect) {select_toEnd_ButtonXPosition + 25, 525, 250, 150};
-	SDL_Rect textRect = (SDL_Rect) {325, 525, 250, 150};
 	SDL_Texture *startTextTexture = createTextTexture(mainGE, "Start Game");
 	SDL_Texture *exitTextTexture = createTextTexture(mainGE, "Exit");
 	while (!endMenu){
@@ -49,8 +48,6 @@ void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const U
 			selectRect.x = select_toStart_ButtonXPosition;
 		};
 		if (keys[SDL_SCANCODE_RETURN] && selectRect.x == select_toStart_ButtonXPosition){
-			endMenu == true;
-
 			SDL_DestroyTexture(startTextTexture);
 			SDL_DestroyTexture(exitTextTexture);
 			*piece = masterPieces[nextPiece(randomNumber) % 5];

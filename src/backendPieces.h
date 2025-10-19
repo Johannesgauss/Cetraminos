@@ -1,13 +1,16 @@
+#pragma once
+#define MAP_X 10
+#define MAP_Y 20
+#define GAME_OVER_ID -1
+#define SPAWN_X_LOCATION 4
+#define SPAWN_Y_LOCATION 3
 #include <stdio.h>
 #include <stdbool.h>
 #include "randomGenerator.h"
 #include "scoreSystem.h"
-#define NUMBER_OF_PIECES 4
 #define PIECE_LIVE_ID piece->typeOfPiece+2*piece->isToRight
 #define PIECE_DEATH_ID piece->typeOfPiece+2*piece->isToRight+1
-#define GAME_OVER_ID -1
-#define SPAWN_X_LOCATION 4
-#define SPAWN_Y_LOCATION 3
+#include <stdlib.h>
 typedef struct Point{
 	int x;
 	int y;

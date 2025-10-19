@@ -91,10 +91,9 @@ int main(int argc, char *argv[])
 	unsigned int deltaTime = 0;
 	unsigned int currentTime;
 	int playerMovement;
-	int Validness = VALID;
 	const Uint8 *keys = SDL_GetKeyboardState(NULL);
 	bool isFalling = false;
-	int willFallNow = 0;
+	unsigned int willFallNow = 0;
 	int score = 0;
 	bool isDropping = false;
 	int moreScore = 0;
@@ -124,12 +123,12 @@ RETURN_TO_MENU:
 //-------------<Music system>
 extern Mix_Music *gMusic;
 	if (!gameQuit){
-		Mix_PlayMusic( gMusic, -1 );
-	//	SDL_Delay(7*1000);
+		Mix_PlayMusic( gMusic, -1);
+		//SDL_Delay(7*1000);
 	};
 //-------------</Music system>
 //-------------<Main loop beginning>
-	int fallingVelocity = 4;
+	unsigned int stepsToFall = 4;
 	while (!gameQuit) {
 		while (SDL_PollEvent(&mainGE->Event)){
 			if(mainGE->Event.type == SDL_QUIT) 
@@ -276,8 +275,7 @@ extern Mix_Music *gMusic;
 		} else {
 			SDL_Delay(20);
 		};
-	};
-	SDL_DestroyTexture(gameOverTexture);
+	};	SDL_DestroyTexture(gameOverTexture);
 	SDL_DestroyTexture(scoreTexture);
 	free(scoreText);
 	free(piece);

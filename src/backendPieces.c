@@ -78,16 +78,26 @@ void Piece__spin(Piece *piece, int Map[MAP_Y][MAP_X])
 
 // Piece__movement
 
-	for (int i = 0; i < 4; i++){
-		resultVector = matrixMultiplication(MATRIX_FROM_ALL_VECTORS, piece->AllVectors[i]);
-		if (Map[piece->bendPoint.y + resultVector.y + isFalling][piece->bendPoint.x + resultVector.x + playerMovement] % 2 == 1){
-			if (Map[piece->bendPoint.y + resultVector.y + isFalling][piece->bendPoint.x + resultVector.x] % 2 == 1)
-				return NO_MORE_VALID;
-			else 
-				return FALLYES_SIDESNO;
+static inline int nextUnrepeteadPiece(int *previousNumber)
+{
+	static int bag[7] = {0,0,0,0,0,0,0};
+	static unsigned char bagIndex = 0;
+	int result;
+	bool endLoop = false; do {
+		bag[bagIndex] = nextPiece(previousNumber);
+		int i = 0; while (i < bagIndex-1 && bag[bagIndex] != bag[i]) i++;
+		if (i >= bagIndex-1 && (bagIndex == 0 || bag[bagIndex-1] != bag[bagIndex])){
+			endLoop = true;
+			result = bag[bagIndex];
+			bagIndex = (bagIndex + 1) % 7;		
 		};
-	};
-	return VALID;
+	/*	i = 0; do {
+			printf("%i ", bag[i]);
+			i++;
+		} while (i < bagIndex); puts("");*/
+	} while (!endLoop); 
+	//printf("result is: %i\n", result);
+       	return result;
 }
 int Piece__movement(Piece *piece, 
 		  int Map[MAP_Y][MAP_X],
@@ -134,10 +144,10 @@ int Piece__movement(Piece *piece,
 		if (isTheMovementValid(piece, Map, playerMovement, 0) == NO_MORE_VALID)
 			return GAME_OVER_ID;
 
-		int randomNumber;
-	       	do {
-			randomNumber = nextPiece(previousNumber) % 7;
-		} while (randomNumber == piece->typeOfPiece / 2 - 1); 
+		int randomNumber; do{
+			randomNumber = nextUnrepeteadPiece(previousNumber);
+		} while(randomNumber == piece->typeOfPiece / 2 -1);
+		printf("randomNumber is: %i\n", randomNumber);
 		Piece__change(piece, masterPieces, randomNumber);
 
 		populateWithGivenNumber(piece, Map, PIECE_LIVE_ID);		

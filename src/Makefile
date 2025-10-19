@@ -1,7 +1,7 @@
 SRC = backendPieces.c randomGenerator.c scoreSystem.c menu.c frontendPieces.c Cetraminos.c music.c
 OBJ = backendPieces.o randomGenerator.o scoreSystem.o menu.o frontendPieces.o Cetraminos.o music.o
 
-CFLAGS = -O3 -c -I/usr/include/SDL2
+CFLAGS = -O3 -c -I/usr/include/SDL2 -Wall -Wextra 
 LDFLAGS = -lSDL2 -lSDL2_ttf  -lSDL2_mixer
 
 all: Cetraminos

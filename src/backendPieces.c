@@ -1,16 +1,13 @@
 #include "backendPieces.h"
 #define MATRIX_FROM_ALL_VECTORS (Vector[2]){piece->xVector,piece->yVector}
 #define SPINNING_MATRIX (Vector[2]){(Vector){0,1},(Vector){-1,0}}
-void changePiece(Piece *masterPieces, Piece *piece, int number)
-{
-	piece->typeOfPiece = masterPieces[number].typeOfPiece;
-	for (int i = 0; i < 4; i++)
-		piece->AllVectors[i] = masterPieces[number].AllVectors[i];
-	piece->xVector = (Vector) {1, 0};
-	piece->yVector = (Vector) {0, 1};
+#define RESPAWN_DELAY 30
+static inline void populateWithGivenNumber(Piece *piece, int Map[MAP_Y][MAP_X], int numberToPopulate);
+static inline Vector matrixMultiplication(Vector matrix[2], Vector vector);
+static int isTheMovementValid(Piece *piece, int Map[MAP_Y][MAP_X], int playerMovement, int isFalling);
 
-}
-void populateWithGivenNumber(int Map[MAP_Y][MAP_X], Piece *piece, int numberToPopulate)
+
+static inline void populateWithGivenNumber(Piece *piece, int Map[MAP_Y][MAP_X], int numberToPopulate)
 {	
 	Vector resultVector;
 	for (int i = 0; i < 4; i++){
@@ -18,14 +15,17 @@ void populateWithGivenNumber(int Map[MAP_Y][MAP_X], Piece *piece, int numberToPo
 		Map[piece->bendPoint.y + resultVector.y][piece->bendPoint.x + resultVector.x] = numberToPopulate;
 	};
 } 
-Vector matrixMultiplication(Vector matrix[2], Vector vector)
+
+static inline Vector matrixMultiplication(Vector matrix[2], Vector vector)
 {
 	Vector resultVector;
 	resultVector = (Vector) {matrix[0].x * vector.x + matrix[1].x * vector.y, matrix[0].y * vector.x + matrix[1].y * vector.y};
 
 	return resultVector;
-};
-void spinPiece(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece)
+}
+
+static int isTheMovementValid(Piece *piece, int Map[MAP_Y][MAP_X], int playerMovement, int isFalling)
+{ 
 {
 
 	Vector tmpxVector;

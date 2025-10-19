@@ -35,10 +35,13 @@ typedef struct Piece{
 	Point	bendPoint;
 	int	isToRight;
 } Piece;
-void changePiece(Piece *masterPieces, Piece *piece, int number);
-void populateWithGivenNumber(int Map[MAP_Y][MAP_X], Piece *piece, int numberToPopulate);
-Vector matrixMultiplication(Vector matrix[2], Vector vector);
-void spinPiece(int Map[MAP_Y][MAP_X], Piece *masterPieces, Piece *piece);
-int isTheMovementValid(int Map[MAP_Y][MAP_X], Piece *piece, int playerMovement, int isFalling);
-int pieceMovement(int Map[MAP_Y][MAP_X], Piece *masterPiece, Piece *piece, int playerMovement, int isFalling, bool isFallingFast,int previousNumber[RANDOM_BUFFER]);
-
+void Piece__change(Piece *self, Piece *masterPieces, int number);
+void Piece__spin(Piece *self, int Map[MAP_Y][MAP_X]);
+int Piece__movement(Piece *self, 
+	   int Map[MAP_Y][MAP_X], 
+	   Piece *masterPieces,
+	   int playerMovement,
+	   int isFalling,
+	   bool isDropping,
+	   int previousNumber[RANDOM_BUFFER],
+	   void (*delay)(unsigned int));

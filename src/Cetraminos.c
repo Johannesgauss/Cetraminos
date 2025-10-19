@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 		}
 	};
 	Piece *piece = (Piece *) malloc(sizeof(Piece));
-	changePiece(masterPieces, piece, 0);
+	Piece__change(piece, masterPieces, 0);
 	bool gameQuit = false;
 	unsigned int lastFrameTime = SDL_GetTicks();
 	unsigned int deltaTime = 0;
@@ -156,40 +156,41 @@ extern Mix_Music *gMusic;
 			SDL_RenderCopy(mainGE->Renderer, gameOverTexture, NULL, &gameOverRect);
 			SDL_RenderPresent(mainGE->Renderer);
 		};
-		if (deltaTime > (20 + 80 * (1 - (fallingVelocity % 4)))) {
-			//nextPiece(randomNumber);
+		if (deltaTime > (20 + 80 * (1 - (stepsToFall % 4)))) {
 			if (!gameOver){
 					if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
 				if(keys[SDL_SCANCODE_J])
-					spinPiece(Map, masterPieces, piece);
-				if(keys[SDL_SCANCODE_K]) 
-					isFallingFast = true;
-				if (willFallNow >= fallingVelocity && !keys[SDL_SCANCODE_J] && !keys[SDL_SCANCODE_K]){
+					Piece__spin(piece, Map);
+				if(keys[SDL_SCANCODE_K]){ 
+					isDropping = true;
+					SDL_Delay(30);
+				};
+				if (willFallNow >= stepsToFall){
 					isFalling = 1;
-					willFallNow = willFallNow % fallingVelocity;
+					willFallNow = willFallNow % stepsToFall;
 				} else {
 					isFalling = false;
-					 willFallNow++;
+					willFallNow++;
 				};
 				if (keys[SDL_SCANCODE_M])
-					fallingVelocity = 1;
+					stepsToFall = 1;
 				else
-					fallingVelocity = 4;
-
+					stepsToFall = 4;
 			};
-				// I need a better solution!
 				if (keys[SDL_SCANCODE_ESCAPE]){
 					gameOver = false;
 					goto RETURN_TO_MENU;
 				};
-//----------------------------</Keys handling>
 //----------------------------<background>
-			SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 0, 255);
-			SDL_RenderClear(mainGE->Renderer);
+		SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 0, 255);
+		SDL_RenderClear(mainGE->Renderer);
+		/*SDL__Render_SetToDrawColor(
+		SDL__Window_Create(
+		SDL__Render_Present(*/
 //----------------------------</background>
 //----------------------------<Score system and PieceMovement>
 			
-			moreScore = pieceMovement(Map, masterPieces, piece, playerMovement, isFalling, isFallingFast, randomNumber);
+			moreScore = Piece__movement(piece, Map, masterPieces, playerMovement, isFalling, isDropping, randomNumber, &SDL_Delay);
 			if (moreScore == GAME_OVER_ID) 
 				gameOver = true;
 			if (moreScore > 0){

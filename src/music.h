@@ -3,5 +3,5 @@
 #include "SDL2/SDL_mixer.h"
 #include <stdio.h>
 #include <string.h>
+#include "error.h"
 void initMusic(char *filename);
-void togglePlay();

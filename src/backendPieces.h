@@ -42,5 +42,4 @@ int Piece__movement(Piece *self,
 	   int playerMovement,
 	   int isFalling,
 	   bool isDropping,
-	   int previousNumber[RANDOM_BUFFER],
 	   void (*delay)(unsigned int));

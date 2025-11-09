@@ -34,8 +34,11 @@ typedef struct Piece{
 	Vector	yVector;
 	Point	bendPoint;
 } Piece;
+/* masterPieces is intended to be an array of Pieces, so a piece "object" "will be one element of this array"*/
 void Piece__change(Piece *self, Piece *masterPieces, int number);
+// A clockwise-only spin
 void Piece__spin(Piece *self, int Map[MAP_Y][MAP_X]);
+// It handles basically all aspects of piece: if it can go to right or left, if it'll fall / drop. When the pieces "dies", what actually happens is that self changes from the death position to SPAWN_X_LOCATION and SPAWN_Y_LOCATION after waiting some time. That's why a delay function is needed!
 int Piece__movement(Piece *self, 
 	   int Map[MAP_Y][MAP_X], 
 	   Piece *masterPieces,

@@ -1,7 +1,7 @@
 #include "menu.h"
 #define select_toStart_ButtonXPosition 300
 #define select_toEnd_ButtonXPosition 800
-void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const Uint8 *keys, int randomNumber[RANDOM_BUFFER]){
+void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const Uint8 *keys){
 	unsigned int deltaTime, currentTime = 0, lastFrameTime = SDL_GetTicks();
 	bool endMenu = false; 
 
@@ -11,7 +11,7 @@ void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const U
 	SDL_Texture *startTextTexture = createTextTexture(mainGE, "Start Game");
 	SDL_Texture *exitTextTexture = createTextTexture(mainGE, "Exit");
 	while (!endMenu){
-		nextPiece(randomNumber);
+		nextPiece();
 		while (SDL_PollEvent(&mainGE->Event)){
 			if(mainGE->Event.type == SDL_QUIT){
 				*gameQuit = true;	
@@ -26,7 +26,7 @@ void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const U
 		deltaTime = currentTime - lastFrameTime;
 		if (deltaTime > 1000) {
 			for (int i = 0; i < 100; i++)
-				nextPiece(randomNumber);
+				nextPiece();
 
 			SDL_RenderClear(mainGE->Renderer);
 			SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 100, 100);
@@ -38,7 +38,7 @@ void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const U
 			SDL_RenderCopy(mainGE->Renderer, exitTextTexture, NULL, &exitButton);
 			SDL_RenderPresent(mainGE->Renderer);
 		} else {
-			nextPiece(randomNumber);
+			nextPiece();
 			SDL_Delay(10);
 		};
 		if (keys[SDL_SCANCODE_L]){
@@ -50,8 +50,8 @@ void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const U
 		if (keys[SDL_SCANCODE_RETURN] && selectRect.x == select_toStart_ButtonXPosition){
 			SDL_DestroyTexture(startTextTexture);
 			SDL_DestroyTexture(exitTextTexture);
-			*piece = masterPieces[nextPiece(randomNumber) % 5];
-			piece->xVector = (Vector) {1 - 2 * (nextPiece(randomNumber) % 2), 0};
+			*piece = masterPieces[nextPiece() % 5];
+			piece->xVector = (Vector) {1 - 2 * (nextPiece() % 2), 0};
 			piece->yVector = (Vector) {0, 1};
 			piece->bendPoint = (Point) {6, 5};
 

@@ -28,11 +28,11 @@ typedef enum TYPE_OF_PIECES{
 	PIECE_O_ID = 14
 } TYPE_OF_PIECES;
 typedef struct Piece{
+	Point	bendPoint;
 	Vector	AllVectors[4];
 	int	typeOfPiece;
 	Vector	xVector;
 	Vector	yVector;
-	Point	bendPoint;
 } Piece;
 /* masterPieces is intended to be an array of Pieces, so a piece "object" "will be one element of this array"*/
 void Piece__change(Piece *self, Piece *masterPieces, int number);

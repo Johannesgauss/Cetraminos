@@ -1,38 +1,38 @@
 #include "frontendPieces.h"
-SDL_Texture *createTextTexture(GE *graphicEnvironment, char *text)
+#include "error.h"
+SDL_Texture *createTextTexture(GE *self, char *text)
 {
-	graphicEnvironment->font = TTF_OpenFont("fonts/DejaVuMathTeXGyre.ttf", 24);
-	if (graphicEnvironment->font == NULL) printf("oops");
-	SDL_Surface *textSurface = TTF_RenderText_Solid(graphicEnvironment->font, text, (SDL_Color){255, 0, 0, 255});
-	SDL_Texture *textTexture = SDL_CreateTextureFromSurface(graphicEnvironment->Renderer, textSurface);
-	if (!textTexture) printf("oops");
-	SDL_FreeSurface(textSurface);
+	self->font = TTF_OpenFont(FONT, FONT_SIZE); get_error(self->font);
+	SDL_Surface *textSurface = TTF_RenderText_Solid(self->font, text, FONT_COLOR); get_error(textSurface);
+	SDL_Texture *textTexture = SDL_CreateTextureFromSurface(self->Renderer, textSurface); get_error(textTexture);
 	return textTexture;
 }
-GE *createGraphicEnvironment()
+
+GE GE__Init()
 {
+	GE self;
 	TTF_Init();
 	SDL_Init(SDL_INIT_VIDEO);
-	GE *graphicEnvironment = (GE *) malloc(sizeof(GE));
-	initMusic("./CetraminosMusic.mp3");
-	graphicEnvironment->Window = SDL_CreateWindow(WINDOW_TITLE, 0, 0, HEIGHT_WINDOW_RESOLUTION, LENGTH_WINDOW_RESOLUTION, WINDOW_FLAGS);
-	if (graphicEnvironment->Window == NULL){
-		SDL_GetError();
-		SDL_Quit();
-	};
-	graphicEnvironment->Renderer = SDL_CreateRenderer(graphicEnvironment->Window, -1, 0);
-	if (graphicEnvironment->Renderer == NULL) {
-		SDL_GetError();
-		SDL_Quit();
-	};
+	initMusic(MUSIC_FILE);
+	self.Window = SDL_CreateWindow(WINDOW_TITLE, 0, 0, HEIGHT_WINDOW_RESOLUTION, LENGTH_WINDOW_RESOLUTION, WINDOW_FLAGS); get_error(self.Window);
+	self.Renderer = SDL_CreateRenderer(self.Window, -1, 0); get_error(self.Renderer);
 
-	return graphicEnvironment;
+	return self;
 }
-void destroyGraphicEnvironment(GE *graphicEnvironment)
+
+GE *GE__Create()
 {
-	TTF_CloseFont(graphicEnvironment->font);
-	SDL_DestroyRenderer(graphicEnvironment->Renderer);
-	SDL_DestroyWindow(graphicEnvironment->Window);
-	free(graphicEnvironment);
+	GE *self = malloc(sizeof(*self)); get_error(self);
+	*self = GE__Init();
+	return self;
+}
+
+
+void GE__Destroy(GE *self)
+{
+	TTF_CloseFont(self->font);
+	SDL_DestroyRenderer(self->Renderer);
+	SDL_DestroyWindow(self->Window);
+	free(self);
 }
 

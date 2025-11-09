@@ -1,54 +1,126 @@
+#pragma once
 #include "Cetraminos.h"
-int main(int argc, char *argv[])
+SDL_Texture *gameOverHandler(GE *mainGE)
 {
+	SDL_Texture *gameOverTexture = createTextTexture(mainGE, "GAME OVER!");
+	SDL_Rect gameOverRect =  (SDL_Rect) {100,100,HEIGHT_WINDOW_RESOLUTION-500,LENGTH_WINDOW_RESOLUTION-500};
+	SDL_RenderCopy(mainGE->Renderer, gameOverTexture, NULL, &gameOverRect); 
+	return gameOverTexture;
+}
 
-//-------------<hardcoded>
-	Piece *masterPieces = (Piece *)malloc(sizeof(Piece)*7); 
-	masterPieces[0].typeOfPiece = PIECE_J_ID;
-	masterPieces[0].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[0].AllVectors[1] = (Vector) {-1, 1};
-	masterPieces[0].AllVectors[2] = (Vector) {0, -1};
-	masterPieces[0].AllVectors[3] = (Vector) {0, 1};
+static inline struct score_sys scoreinit(GE *mainGE, unsigned long text_buffer_size, SDL_Rect score_rect)
+{
+	struct score_sys scoresys;
 
-	masterPieces[1].typeOfPiece = PIECE_L_ID;
-	masterPieces[1].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[1].AllVectors[1] = (Vector) {1, 1};
-	masterPieces[1].AllVectors[2] = (Vector) {0, -1};
-	masterPieces[1].AllVectors[3] = (Vector) {0, 1};
+	scoresys.text_length = text_buffer_size;
+	scoresys.text = malloc(sizeof(*scoresys.text) * scoresys.text_length); get_error(scoresys.text);
+	scoresys.score = 0;
+	sprintf(scoresys.text, "Score: %d", scoresys.score);
+	scoresys.rect = score_rect; 
+	scoresys.texture = createTextTexture(mainGE, scoresys.text);
+	return scoresys;
+}
 
-	masterPieces[2].typeOfPiece = PIECE_S_ID;
-	masterPieces[2].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[2].AllVectors[1] = (Vector) {0, -1};
-	masterPieces[2].AllVectors[2] = (Vector) {-1, -1};
-	masterPieces[2].AllVectors[3] = (Vector) {1, 0};
+void score_sys_destroy(struct score_sys *scoresys)
+{
+	SDL_DestroyTexture(scoresys->texture);
+	free(scoresys->text);
+}
 
-	masterPieces[3].typeOfPiece = PIECE_Z_ID;
-	masterPieces[3].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[3].AllVectors[1] = (Vector) {0, -1};
-	masterPieces[3].AllVectors[2] = (Vector) {1, -1};
-	masterPieces[3].AllVectors[3] = (Vector) {-1, 0};
+void scoreHandler(struct score_sys *scoresys, GE *mainGE, int moreScore)
+{
+	if (moreScore > 0){
+		scoresys->score += moreScore;
+		// Unecessary, but if I can, I do
+		snprintf(scoresys->text, scoresys->text_length, "Score: %d", scoresys->score);
+		scoresys->texture = createTextTexture(mainGE, scoresys->text);
+	};
+	SDL_RenderCopy(mainGE->Renderer, scoresys->texture, NULL, &(scoresys->rect));
+}
 
-	masterPieces[4].typeOfPiece = PIECE_I_ID;
-	masterPieces[4].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[4].AllVectors[1] = (Vector) {0, -1};
-	masterPieces[4].AllVectors[2] = (Vector) {0, 1};
-	masterPieces[4].AllVectors[3] = (Vector) {0, 2};
+static SDL_Rect greenSquare[MAP_Y][MAP_X];
+void GE__Renderer(GE *mainGE, int Map[MAP_Y][MAP_X])
+{
+	int Render[8][4] = { RENDER_ARRAY };
+	for (int j = 5; j < MAP_Y; j++){
+		for (int i = 0; i < MAP_X; i++){
+			if (Map[j][i] != 0){
+				int MapPointNum = (Map[j][i] == 1) ? 0 : (Map[j][i] - Map[j][i] % 2 - 2) / 2 + 1;
+				SDL_SetRenderDrawColor(mainGE->Renderer, 
+				Render[MapPointNum][0],
+				Render[MapPointNum][1], 
+				Render[MapPointNum][2], 
+				Render[MapPointNum][3]);
+				SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
+			}
+		}
+	}
+}
 
-	masterPieces[5].typeOfPiece = PIECE_T_ID;
-	masterPieces[5].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[5].AllVectors[1] = (Vector) {-1, 0};
-	masterPieces[5].AllVectors[2] = (Vector) {1, 0};
-	masterPieces[5].AllVectors[3] = (Vector) {0, 1};
+Game Game__Init()
+{
+	Game self;
+	for (int j = 5; j < MAP_Y; j++){
+		for (int i = 0; i < MAP_X; i++){
+			greenSquare[j][i].x = 600 + 35 * i;
+			greenSquare[j][i].y = 100 + 35 * (j-5);
+			greenSquare[j][i].w = 35;
+			greenSquare[j][i].h = 35;
+		}
+	};
 
+	self.masterPieces = malloc(sizeof(*(self.masterPieces)) * 7);
+	self.piece = malloc(sizeof(*(self.piece))); 
+	self.masterPieces[0].typeOfPiece = PIECE_J_ID;
+	self.masterPieces[0].AllVectors[0] = (Vector) {0, 0};
+	self.masterPieces[0].AllVectors[1] = (Vector) {-1, 1};
+	self.masterPieces[0].AllVectors[2] = (Vector) {0, -1};
+	self.masterPieces[0].AllVectors[3] = (Vector) {0, 1};
 
-	masterPieces[6].typeOfPiece = PIECE_O_ID;
-	masterPieces[6].AllVectors[0] = (Vector) {0, 0};
-	masterPieces[6].AllVectors[1] = (Vector) {0, 1};
-	masterPieces[6].AllVectors[2] = (Vector) {1, 0};
-	masterPieces[6].AllVectors[3] = (Vector) {1, 1};
+	self.masterPieces[1].typeOfPiece = PIECE_L_ID;
+	self.masterPieces[1].AllVectors[0] = (Vector) {0, 0};
+	self.masterPieces[1].AllVectors[1] = (Vector) {1, 1};
+	self.masterPieces[1].AllVectors[2] = (Vector) {0, -1};
+	self.masterPieces[1].AllVectors[3] = (Vector) {0, 1};
 
-		
-	int Map[MAP_Y][MAP_X] = {
+	self.masterPieces[2].typeOfPiece = PIECE_S_ID;
+	self.masterPieces[2].AllVectors[0] = (Vector) {0, 0};
+	self.masterPieces[2].AllVectors[1] = (Vector) {0, -1};
+	self.masterPieces[2].AllVectors[2] = (Vector) {-1, -1};
+	self.masterPieces[2].AllVectors[3] = (Vector) {1, 0};
+
+	self.masterPieces[3].typeOfPiece = PIECE_Z_ID;
+	self.masterPieces[3].AllVectors[0] = (Vector) {0, 0};
+	self.masterPieces[3].AllVectors[1] = (Vector) {0, -1};
+	self.masterPieces[3].AllVectors[2] = (Vector) {1, -1};
+	self.masterPieces[3].AllVectors[3] = (Vector) {-1, 0};
+
+	self.masterPieces[4].typeOfPiece = PIECE_I_ID;
+	self.masterPieces[4].AllVectors[0] = (Vector) {0, 0};
+	self.masterPieces[4].AllVectors[1] = (Vector) {0, -1};
+	self.masterPieces[4].AllVectors[2] = (Vector) {0, 1};
+	self.masterPieces[4].AllVectors[3] = (Vector) {0, 2};
+
+	self.masterPieces[5].typeOfPiece = PIECE_T_ID;
+	self.masterPieces[5].AllVectors[0] = (Vector) {0, 0};
+	self.masterPieces[5].AllVectors[1] = (Vector) {-1, 0};
+	self.masterPieces[5].AllVectors[2] = (Vector) {1, 0};
+	self.masterPieces[5].AllVectors[3] = (Vector) {0, 1};
+
+	self.masterPieces[6].typeOfPiece = PIECE_O_ID;
+	self.masterPieces[6].AllVectors[0] = (Vector) {0, 0};
+	self.masterPieces[6].AllVectors[1] = (Vector) {0, 1};
+	self.masterPieces[6].AllVectors[2] = (Vector) {1, 0};
+	self.masterPieces[6].AllVectors[3] = (Vector) {1, 1};
+
+	self.Map = malloc(sizeof(int)* MAP_X * (MAP_Y));	
+	int tmpMap[MAP_Y][MAP_X] = {
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+		{1,0,0,0,0,0,0,0,0,1},
+
 		{1,0,0,0,0,0,0,0,0,1},
 		{1,0,0,0,0,0,0,0,0,1},
 		{1,0,0,0,0,0,0,0,0,1},
@@ -69,218 +141,28 @@ int main(int argc, char *argv[])
 		{1,0,0,0,0,0,0,0,0,1},
 		{1,0,0,0,0,0,0,0,0,1},
 		{1,1,1,1,1,1,1,1,1,1},
-					}; 
+	}; 
 	
-;
-	GE *mainGE = createGraphicEnvironment();
-	
-	SDL_Rect greenSquare[MAP_Y][MAP_X];
+	memmove(self.Map, tmpMap, sizeof(tmpMap));
+	Piece__change(self.piece, self.masterPieces, 0);
+	self.GE = GE__Init();
+	self.scoresys = scoreinit(&(self.GE), TEXT_BUFFER_SIZE, SCORE_RECT);
 
-	for (int j = 0; j < MAP_Y; j++){
-		for (int i = 0; i < MAP_X; i++){
-			greenSquare[j][i].x = 600 + 35 * i;
-			greenSquare[j][i].y = 100 + 35 * j;
-			greenSquare[j][i].w = 35;
-			greenSquare[j][i].h = 35;
-		}
-	};
-	Piece *piece = (Piece *) malloc(sizeof(Piece));
-	Piece__change(piece, masterPieces, 0);
-	bool gameQuit = false;
-	unsigned int lastFrameTime = SDL_GetTicks();
-	unsigned int deltaTime = 0;
-	unsigned int currentTime;
-	int playerMovement;
-	const Uint8 *keys = SDL_GetKeyboardState(NULL);
-	bool isFalling = false;
-	unsigned int willFallNow = 0;
-	int score = 0;
-	bool isDropping = false;
-	int moreScore = 0;
-	int randomNumber[RANDOM_BUFFER] = {1, 31, 51, 101, 37, 29, 19, 202, 81, 53, 12, 73, 16, 195, 92};
+	return self;
+}
 
+Game *Game__Create()
+{
+	Game *self = malloc(sizeof(*self));
+	*self = Game__Init();
 
-	bool gameOver = false;
-	size_t scoreText_buffer;
-       	char *scoreText = (char *) malloc(40);
-	sprintf(scoreText, "Score: %d", score);
-	SDL_Rect scoreRect =  (SDL_Rect) {100,100,200,100};
-RETURN_TO_MENU:
-	score = 0;
-	sprintf(scoreText, "Score: %d", score);
-	for (int j = 0; j < MAP_Y-1; j++){
-		for (int i = 1; i < MAP_X-1; i++)
-			Map[j][i] = 0;
-	};
-//-------------</hardcoded>
-//-------------<menu>
-	menu(mainGE, masterPieces, piece, &gameQuit, keys, randomNumber);
-//-------------</menu>
-//----------------------------<Text Texture creation>
-	SDL_Texture *gameOverTexture = createTextTexture(mainGE, "GAME OVER!");
-	SDL_Texture *scoreTexture = createTextTexture(mainGE, scoreText);
-//----------------------------</Text Texture creation>
-//-------------<Music system>
-extern Mix_Music *gMusic;
-	if (!gameQuit){
-		Mix_PlayMusic( gMusic, -1);
-		//SDL_Delay(7*1000);
-	};
-//-------------</Music system>
-//-------------<Main loop beginning>
-	unsigned int stepsToFall = 4;
-	while (!gameQuit) {
-		while (SDL_PollEvent(&mainGE->Event)){
-			if(mainGE->Event.type == SDL_QUIT) 
-		gameQuit = true;
-		};
-		currentTime = SDL_GetTicks();
-		deltaTime = currentTime - lastFrameTime;
+	return self;
+}
 
-
-//----------------------------- <Random Number Generator>
-		nextPiece(randomNumber);
-//----------------------------- </Random Number Generator>
-//----------------------------- <Keys handling>	
-		if (!gameOver){
-			if (keys[SDL_SCANCODE_L])
-				playerMovement = 1;
-			else if (keys[SDL_SCANCODE_H] == true)
-				playerMovement = -1;
-			else
-				playerMovement = 0;
-		};
-		if (gameOver){
-			SDL_Rect gameOverRect =  (SDL_Rect) {100,100,HEIGHT_WINDOW_RESOLUTION-500,LENGTH_WINDOW_RESOLUTION-500};
-			SDL_RenderCopy(mainGE->Renderer, gameOverTexture, NULL, &gameOverRect);
-			SDL_RenderPresent(mainGE->Renderer);
-		};
-		if (deltaTime > (20 + 80 * (1 - (stepsToFall % 4)))) {
-			if (!gameOver){
-					if (keys[SDL_SCANCODE_L]) playerMovement = 1; else if (keys[SDL_SCANCODE_H] == true) playerMovement = -1; else playerMovement = 0;
-				if(keys[SDL_SCANCODE_J])
-					Piece__spin(piece, Map);
-				if(keys[SDL_SCANCODE_K]){ 
-					isDropping = true;
-					SDL_Delay(30);
-				};
-				if (willFallNow >= stepsToFall){
-					isFalling = 1;
-					willFallNow = willFallNow % stepsToFall;
-				} else {
-					isFalling = false;
-					willFallNow++;
-				};
-				if (keys[SDL_SCANCODE_M])
-					stepsToFall = 1;
-				else
-					stepsToFall = 4;
-			};
-				if (keys[SDL_SCANCODE_ESCAPE]){
-					gameOver = false;
-					goto RETURN_TO_MENU;
-				};
-//----------------------------<background>
-		SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 0, 255);
-		SDL_RenderClear(mainGE->Renderer);
-		/*SDL__Render_SetToDrawColor(
-		SDL__Window_Create(
-		SDL__Render_Present(*/
-//----------------------------</background>
-//----------------------------<Score system and PieceMovement>
-			
-			moreScore = Piece__movement(piece, Map, masterPieces, playerMovement, isFalling, isDropping, randomNumber, &SDL_Delay);
-			if (moreScore == GAME_OVER_ID) 
-				gameOver = true;
-			if (moreScore > 0){
-				score += moreScore;
-				// Unecessary, but if I can, I do
-				scoreText_buffer = snprintf(NULL, 0, "Score: %d", score); if (scoreText_buffer <= 40) snprintf(scoreText, scoreText_buffer, "Score: %d", score);
-				scoreTexture = createTextTexture(mainGE, scoreText);
-			};
-			SDL_RenderCopy(mainGE->Renderer, scoreTexture, NULL, &scoreRect);
-//----------------------------</Score system and PieceMovement>
-			isDropping = false; // I gotta change this name later, this name is so counterintuitive!
-//----------------------------Rendering loop
-
-			for (int j = 0; j < MAP_Y; j++){
-				for (int i = 0; i < MAP_X; i++){
-					switch (Map[j][i]){
-					case PIECE_L_ID:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 200, 100, 100, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_L_ID + 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 200, 100, 100, 100);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_J_ID:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 0, 100, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_J_ID + 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 0, 100, 100);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_S_ID:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 0, 255, 50, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_S_ID + 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 0, 255, 50, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_Z_ID:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 255, 255, 255, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_Z_ID + 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 255, 255, 255, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_I_ID:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 154, 137, 200, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_I_ID + 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 154, 137, 200, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_T_ID:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 255, 0, 0, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_T_ID + 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 255, 0, 0, 100);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_O_ID:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 150, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case PIECE_O_ID + 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 150, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					case 1:
-						SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 50, 255);
-						SDL_RenderFillRect(mainGE->Renderer, &greenSquare[j][i]);
-						break;
-					};
-				}
-			}
-			lastFrameTime = SDL_GetTicks();
-			deltaTime = 0;
-			SDL_RenderPresent(mainGE->Renderer);
-		} else {
-			SDL_Delay(20);
-		};
-	};	SDL_DestroyTexture(gameOverTexture);
-	SDL_DestroyTexture(scoreTexture);
-	free(scoreText);
-	free(piece);
-	free(masterPieces);
-	Mix_FreeMusic(gMusic);
-	destroyGraphicEnvironment(mainGE);
-	return 0;
+void Game__Destroy(Game *self)
+{
+	free(self->piece);
+	free(self->masterPieces);
+	free(self->Map);
+	score_sys_destroy(&self->scoresys);
 }

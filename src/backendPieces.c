@@ -77,27 +77,20 @@ void Piece__spin(Piece *piece, int Map[MAP_Y][MAP_X])
 	populateWithGivenNumber(piece, Map, PIECE_LIVE_ID);
 }
 
-// Piece__movement
-
-static inline int nextUnrepeteadPiece(int *previousNumber)
+static inline int nextUnrepeteadPiece()
 {
 	static int bag[7] = {0,0,0,0,0,0,0};
 	static unsigned char bagIndex = 0;
 	int result;
 	bool endLoop = false; do {
-		bag[bagIndex] = nextPiece(previousNumber);
+		bag[bagIndex] = nextPiece();
 		int i = 0; while (i < bagIndex-1 && bag[bagIndex] != bag[i]) i++;
 		if (i >= bagIndex-1 && (bagIndex == 0 || bag[bagIndex-1] != bag[bagIndex])){
 			endLoop = true;
 			result = bag[bagIndex];
 			bagIndex = (bagIndex + 1) % 7;		
 		};
-	/*	i = 0; do {
-			printf("%i ", bag[i]);
-			i++;
-		} while (i < bagIndex); puts("");*/
 	} while (!endLoop); 
-	//printf("result is: %i\n", result);
        	return result;
 }
 
@@ -107,7 +100,6 @@ int Piece__movement(Piece *piece,
 	       	  int playerMovement,
 		  int isFalling,
 		  bool isDropping,
-		  int previousNumber[RANDOM_BUFFER],
 		  void (*delay)(unsigned int))
 {
 	int score = 0;
@@ -141,10 +133,9 @@ int Piece__movement(Piece *piece,
 		if (isTheMovementValid(piece, Map, playerMovement, 0) == NO_MORE_VALID)
 			return GAME_OVER_ID;
 
-		int randomNumber; do{
-			randomNumber = nextUnrepeteadPiece(previousNumber);
+		int randomNumber; do {
+			randomNumber = nextUnrepeteadPiece();
 		} while(randomNumber == piece->typeOfPiece / 2 -1);
-		printf("randomNumber is: %i\n", randomNumber);
 		Piece__change(piece, masterPieces, randomNumber);
 
 		populateWithGivenNumber(piece, Map, PIECE_LIVE_ID);		

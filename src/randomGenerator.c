@@ -1,7 +1,6 @@
 #include "randomGenerator.h"
-#include <stdlib.h>
-#include <stdio.h>
-int *numberGenerator(int previousNumber[RANDOM_BUFFER])
+static int previousNumber[RANDOM_BUFFER] = {1, 31, 51, 101, 37, 29, 19, 202, 81, 53, 12, 73, 16, 195, 92};
+int *numberGenerator()
 {
 	int midNumber[17];
 	for (int i = 15; i> -1; i--){
@@ -13,10 +12,11 @@ int *numberGenerator(int previousNumber[RANDOM_BUFFER])
 	}; 
 	return previousNumber;
 }
-int nextPiece(int previousNumber[RANDOM_BUFFER])
+
+int nextPiece()
 {
 	int result;
-	int *randomGeneratedNumber = numberGenerator(previousNumber);
+	int *randomGeneratedNumber = numberGenerator();
 	for (int i = 0; i < 4; i++){
 		result = result ^ randomGeneratedNumber[i]; 		
 	};

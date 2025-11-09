@@ -3,11 +3,10 @@
 #define PIECE_DEATH_ID piece->typeOfPiece+1
 #define MATRIX_FROM_ALL_VECTORS (Vector[2]){piece->xVector,piece->yVector}
 #define SPINNING_MATRIX (Vector[2]){(Vector){0,1},(Vector){-1,0}}
-#define RESPAWN_DELAY 30
+#define RESPAWN_DELAY 0
 static inline void populateWithGivenNumber(Piece *piece, int Map[MAP_Y][MAP_X], int numberToPopulate);
 static inline Vector matrixMultiplication(Vector matrix[2], Vector vector);
 static int isTheMovementValid(Piece *piece, int Map[MAP_Y][MAP_X], int playerMovement, int isFalling);
-
 
 static inline void populateWithGivenNumber(Piece *piece, int Map[MAP_Y][MAP_X], int numberToPopulate)
 {	
@@ -54,10 +53,10 @@ void Piece__change(Piece *piece, Piece *masterPieces, int number)
 
 void Piece__spin(Piece *piece, int Map[MAP_Y][MAP_X])
 {
+	// Verification step
 	Vector tmpxVector;
 	Vector tmpyVector;
 
-	// Verification step
 	tmpxVector = matrixMultiplication(SPINNING_MATRIX, piece->xVector);
 	tmpyVector= matrixMultiplication(SPINNING_MATRIX, piece->yVector);
 	Vector tmp_matrixFromAllVectors[2];
@@ -67,10 +66,10 @@ void Piece__spin(Piece *piece, int Map[MAP_Y][MAP_X])
 
 	for (int i = 0; i < 4; i++){
 		resultVector = matrixMultiplication(tmp_matrixFromAllVectors, piece->AllVectors[i]);
-		if (Map[piece->bendPoint.y + resultVector.y][piece->bendPoint.x + resultVector.x] % 2 == 1){
+		if (Map[piece->bendPoint.y + resultVector.y][piece->bendPoint.x + resultVector.x] % 2 == 1)
 			return;
-		};
 	}; 
+	
 	// If succeded
 	populateWithGivenNumber(piece, Map, 0);
 	piece->xVector = tmpxVector;
@@ -101,6 +100,7 @@ static inline int nextUnrepeteadPiece(int *previousNumber)
 	//printf("result is: %i\n", result);
        	return result;
 }
+
 int Piece__movement(Piece *piece, 
 		  int Map[MAP_Y][MAP_X],
 		  Piece *masterPieces,
@@ -114,21 +114,16 @@ int Piece__movement(Piece *piece,
 	int isValid = isTheMovementValid(piece, Map, playerMovement, isFalling);
 	if (isValid == VALID){
 		populateWithGivenNumber(piece, Map, 0);		
-		// There's a bug here when I press k+l and I gotta fix it
-	
-		// It "falls" once and see if it'll "drop". If so, it'll go down by 1 until it's no more valid and then stops.
-		// Oh, man! Comments in the code let's this seems it was made by AI. It you have any doubt it was 100% human made, reconsider your intelligence!
-		// I hate this AI bubble, I hope this bubble explodes soon!
-		// perhabs I'll change my opinion, though
+
 		piece->bendPoint.x += playerMovement;	
 		piece->bendPoint.y += isFalling;	
-		if (isDropping){
-			isValid = isTheMovementValid(piece, Map, 0, 1);
-			do {
-				piece->bendPoint.y += 1;	
-				isValid = isTheMovementValid(piece, Map, 0, 1);
-			} while (isValid != NO_MORE_VALID);
-		};	
+
+		//isValid = isTheMovementValid(piece, Map, 0, 1);
+		while (isDropping && isTheMovementValid(piece, Map, 0, 1) != NO_MORE_VALID){
+			piece->bendPoint.y += 1;
+			//isValid = isTheMovementValid(piece, Map, 0, 1);
+		};
+		
 		populateWithGivenNumber(piece, Map, PIECE_LIVE_ID);		
 	} else if (isValid == FALLYES_SIDESNO && isFalling == 1){
 		populateWithGivenNumber(piece, Map, 0);		

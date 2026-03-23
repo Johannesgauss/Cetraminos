@@ -1,8 +1,7 @@
-SRC = backendPieces.c randomGenerator.c scoreSystem.c menu.c frontendPieces.c Cetraminos.c music.c
-OBJ = backendPieces.o randomGenerator.o scoreSystem.o menu.o frontendPieces.o Cetraminos.o music.o
-
+SRC = backendPieces.c frontendPieces.c main.c music.c randomGenerator.c scoreSystem.c Cetraminos.c menu.c GString.c
+OBJ = backendPieces.o frontendPieces.o main.o music.o randomGenerator.o scoreSystem.o Cetraminos.o menu.o GString.o
 CFLAGS = -O3 -c -I/usr/include/SDL2 -Wall -Wextra 
-LDFLAGS = -lSDL2 -lSDL2_ttf  -lSDL2_mixer
+LDFLAGS = -lm -lSDL2 -lSDL2_ttf  -lSDL2_mixer
 
 all: Cetraminos
 Cetraminos: $(OBJ)
@@ -10,8 +9,8 @@ Cetraminos: $(OBJ)
 	@rm -f Cetraminos
 	@gcc $(OBJ) $(LDFLAGS) -o Cetraminos
 	@echo Linkking OK...
-	@echo Cleaning
-	@rm -f *.o
+#	@echo Cleaning
+#	@rm -f *.o
 
 clean:
 	@echo Cleaning

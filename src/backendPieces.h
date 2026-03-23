@@ -1,9 +1,6 @@
-#pragma once
-#define MAP_X 10
-#define MAP_Y 20
+#ifndef PIECE_MOVEMENT_H
+#define PIECE_MOVEMENT_H
 #define GAME_OVER_ID -1
-#define SPAWN_X_LOCATION 4
-#define SPAWN_Y_LOCATION 3
 #include <stdio.h>
 #include <stdbool.h>
 #include "randomGenerator.h"
@@ -46,3 +43,4 @@ int Piece__movement(Piece *self,
 	   int isFalling,
 	   bool isDropping,
 	   void (*delay)(unsigned int));
+#endif // PIECE_MOVEMENT_H

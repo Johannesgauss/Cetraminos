@@ -1,7 +1,7 @@
 #include "menu.h"
 #define select_toStart_ButtonXPosition 300
 #define select_toEnd_ButtonXPosition 800
-void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const Uint8 *keys){
+void menu(GE mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const Uint8 *keys){
 	unsigned int deltaTime, currentTime = 0, lastFrameTime = SDL_GetTicks();
 	bool endMenu = false; 
 
@@ -12,39 +12,39 @@ void menu(GE *mainGE, Piece* masterPieces, Piece *piece, bool *gameQuit, const U
 	SDL_Texture *exitTextTexture = createTextTexture(mainGE, "Exit");
 	while (!endMenu){
 		nextPiece();
-		while (SDL_PollEvent(&mainGE->Event)){
-			if(mainGE->Event.type == SDL_QUIT){
+		while (SDL_PollEvent(&mainGE.Event)){
+			if(mainGE.Event.type == SDL_QUIT){
 				*gameQuit = true;	
 			};
 		};
 
-		SDL_SetRenderDrawColor(mainGE->Renderer, 0, 0, 0, 255);
-		SDL_RenderClear(mainGE->Renderer);
+		SDL_SetRenderDrawColor(mainGE.Renderer, 0, 0, 0, 255);
+		SDL_RenderClear(mainGE.Renderer);
 
 
 		currentTime = SDL_GetTicks();
 		deltaTime = currentTime - lastFrameTime;
-		if (deltaTime > 1000) {
+		if (deltaTime > 100) {
 			for (int i = 0; i < 100; i++)
 				nextPiece();
 
-			SDL_RenderClear(mainGE->Renderer);
-			SDL_SetRenderDrawColor(mainGE->Renderer, 100, 100, 100, 100);
-			SDL_RenderFillRect(mainGE->Renderer, &selectRect);
-			SDL_SetRenderDrawColor(mainGE->Renderer, 255, 255, 255, 100);
-			SDL_RenderFillRect(mainGE->Renderer, &startButton);
-			SDL_RenderFillRect(mainGE->Renderer, &exitButton);
-			SDL_RenderCopy(mainGE->Renderer, startTextTexture, NULL, &startButton);
-			SDL_RenderCopy(mainGE->Renderer, exitTextTexture, NULL, &exitButton);
-			SDL_RenderPresent(mainGE->Renderer);
+			SDL_RenderClear(mainGE.Renderer);
+			SDL_SetRenderDrawColor(mainGE.Renderer, 100, 100, 100, 100);
+			SDL_RenderFillRect(mainGE.Renderer, &selectRect);
+			SDL_SetRenderDrawColor(mainGE.Renderer, 255, 255, 255, 100);
+			SDL_RenderFillRect(mainGE.Renderer, &startButton);
+			SDL_RenderFillRect(mainGE.Renderer, &exitButton);
+			SDL_RenderCopy(mainGE.Renderer, startTextTexture, NULL, &startButton);
+			SDL_RenderCopy(mainGE.Renderer, exitTextTexture, NULL, &exitButton);
+			SDL_RenderPresent(mainGE.Renderer);
 		} else {
 			nextPiece();
 			SDL_Delay(10);
 		};
-		if (keys[SDL_SCANCODE_L]){
+		if (keys[SDL_SCANCODE_RIGHT]){
 			selectRect.x = select_toEnd_ButtonXPosition;
 		};
-		if (keys[SDL_SCANCODE_H]){
+		if (keys[SDL_SCANCODE_LEFT]){
 			selectRect.x = select_toStart_ButtonXPosition;
 		};
 		if (keys[SDL_SCANCODE_RETURN] && selectRect.x == select_toStart_ButtonXPosition){

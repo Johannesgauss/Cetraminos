@@ -8,7 +8,12 @@ error.txt
 errors.txt
 
 # Ignore music files 
-CetraminosMusic.mp3
+src/CetraminosMusic.mp3
+src/CetraminosMusic2.mp3
+
+# Also ignore score files
+src/total_score.txt
+src/total\ score.txt
 # Object files
 *.o
 *.ko

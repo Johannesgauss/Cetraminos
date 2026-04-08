@@ -21,8 +21,8 @@ make
 For the music, you must have a CetraminosMusic.mp3 file. I have not found yet a good recording of Odeon (Ernesto Nazareth) without having authorial problems, but I strongly recommend you to do so if you can. There's an intentional delay of 7 seconds until the start.
 
 # How to play
-← and → for going left or right.
-Upper arrow key: Spinning
-↓ : Drops the piece faster
-Space : Drops the piece instantly
-Esc : Returns to Menu
+* ← and → for going left or right.
+* Upper arrow key: Spinning.
+* ↓ : Drops the piece faster
+* Space : Drops the piece instantly
+* Esc : Returns to Menu

@@ -1,7 +1,7 @@
 #include "frontendPieces.h"
 #include "error.h"
 #define WINDOW_TITLE "Cetraminos"
-#define MUSIC_FILE "./CetraminosMusic2.mp3"
+#define MUSIC_FILE "./CetraminosMusic.mp3"
 #define FONT_COLOR (SDL_Color){255, 0, 0, 255}
 
 struct GE_Data{

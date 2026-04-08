@@ -24,5 +24,5 @@ For the music, you must have a CetraminosMusic.mp3 file. I have not found yet a 
 * ← and → for going left or right.
 * Upper arrow key: Spinning.
 * ↓ : Drops the piece faster
-* Space : Drops the piece instantly
+* Ctrl : Drops the piece instantly
 * Esc : Returns to Menu
